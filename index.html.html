@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAPS Accelerator OS</title>
+    <style>
+        :root {
+            --ink: #0d0d12;
+            --ink-muted: #5a5a6e;
+            --ink-faint: #9898ab;
+            --surface: #f5f5f8;
+            --surface-2: #eeeef3;
+            --surface-card: #ffffff;
+            --accent: #3b5bdb;
+            --accent-light: #e8edff;
+            --border: #e2e2ea;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --sidebar-w: 240px;
+            --header-h: 60px;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--surface); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* CONFIG BANNER */
+        #config-banner {
+            background: #fff3cd;
+            border-bottom: 2px solid #f59f00;
+            padding: 12px 20px;
+            font-size: 13px;
+            color: #7a4f00;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .config-input-group { display: flex; gap: 8px; flex-grow: 1; max-width: 600px; }
+        .config-input-group input { flex-grow: 1; padding: 6px 10px; border: 1px solid #ccc; border-radius: var(--radius-sm); font-size: 13px; }
+        .config-btn { background: #f59f00; color: white; border: none; padding: 6px 12px; border-radius: var(--radius-sm); cursor: pointer; font-weight: bold; }
+        .config-btn:hover { background: #d98200; }
+
+        /* LAYOUT */
+        #topbar {
+            height: var(--header-h);
+            background: var(--ink);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: #3b5bdb; }
+        
+        #main-container { display: flex; margin-top: var(--header-h); min-height: calc(100vh - var(--header-h)); }
+        
+        /* SIDEBAR */
+        #sidebar {
+            width: var(--sidebar-w);
+            background: var(--surface-card);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            position: fixed;
+            top: var(--header-h); bottom: 0; left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .nav-btn {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px; background: transparent; border: none;
+            border-radius: var(--radius); text-align: left;
+            font-size: 14px; font-weight: 500; color: var(--ink-muted);
+            cursor: pointer; width: 100%; transition: all var(--t);
+        }
+        .nav-btn.active, .nav-btn:hover { background: var(--accent-light); color: var(--accent); }
+
+        /* CONTENT */
+        #content { margin-left: var(--sidebar-w); flex-grow: 1; padding: 30px; }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* FILTER & CONTROLS */
+        .controls-row { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+        .search-input { flex-grow: 1; min-width: 200px; padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; }
+        .filter-select { padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: white; font-size: 14px; }
+
+        /* CARDS GRID */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, min-max(300px, 1fr)); grid-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-title { font-size: 16px; font-weight: 600; color: var(--ink); }
+        .badge { padding: 4px 8px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; }
+        .badge-level { background: #e8f5e9; color: #2e7d32; }
+        .card-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .tag-container { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag { background: var(--surface-2); color: var(--ink-muted); padding: 3px 8px; border-radius: 4px; font-size: 11px; }
+
+        /* MODAL (詳細彈窗) */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: var(--radius); max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; padding: 30px; position: relative; box-shadow: var(--shadow-lg); }
+        .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--ink-faint); }
+        .modal-body { display: flex; flex-direction: column; gap: 16px; margin-top: 10px; }
+        .modal-field { border-bottom: 1px solid var(--surface); padding-bottom: 10px; }
+        .modal-label { font-size: 12px; color: var(--ink-faint); font-weight: 600; margin-bottom: 4px; }
+        .modal-value { font-size: 14px; color: var(--ink); line-height: 1.6; }
+
+        /* LOADING */
+        .loading-spinner { display: none; text-align: center; padding: 4px; font-size: 14px; color: var(--ink-muted); }
+        .loading-spinner.active { display: block; }
+
+
+        /* MULTI SELECT FILTER */
+        .multi-select { position: relative; min-width: 180px; }
+        .multi-select-trigger {
+            width: 100%; padding: 10px 34px 10px 14px;
+            border: 1px solid var(--border); border-radius: var(--radius);
+            background: white; font-size: 14px; color: var(--ink);
+            cursor: pointer; text-align: left; position: relative;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .multi-select-trigger::after {
+            content: '▾'; position: absolute; right: 12px; top: 50%;
+            transform: translateY(-50%); color: var(--ink-faint);
+        }
+        .multi-select-menu {
+            display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 200;
+            width: 240px; max-height: 260px; overflow-y: auto;
+            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+            box-shadow: var(--shadow-md); padding: 8px;
+        }
+        .multi-select.open .multi-select-menu { display: block; }
+        .multi-option {
+            display: flex; align-items: center; gap: 8px;
+            padding: 7px 8px; border-radius: var(--radius-sm);
+            font-size: 13px; color: var(--ink); cursor: pointer;
+        }
+        .multi-option:hover { background: var(--surface); }
+        .multi-option input { margin: 0; }
+        .market-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .tag-market { background: #e8f5e9; color: #2e7d32; }
+    </style>
+</head>
+<body>
+
+
+    <!-- 頂部標題列 -->
+    <div id="topbar">
+        <div class="logo"><div class="logo-dot"></div> IAPS Accelerator OS</div>
+    </div>
+
+    <div id="main-container">
+        <!-- 側邊導覽列 -->
+        <div id="sidebar">
+            <button class="nav-btn active" onclick="switchPage('startups')">🚀 培育新創團隊</button>
+            <button class="nav-btn" onclick="switchPage('alumni')">🎓 歷史畢業新創</button>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div id="content">
+            <div id="loading-block" class="loading-spinner">正在從 Google Sheet 即時載入並加密串接最新資料...</div>
+
+            <!-- 頁面：培育新創 -->
+            <div id="page-startups" class="page active">
+                <div class="controls-row">
+                    <input type="text" class="search-input" id="search-startups" placeholder="搜尋公司名稱、簡介或產品關鍵字..." oninput="filterData('startups')">
+                    <select class="filter-select" id="filter-level" onchange="filterData('startups')">
+                        <option value="">所有會員等級</option>
+                    </select>
+                    <div class="multi-select" id="multi-tag-startups">
+                        <button type="button" class="multi-select-trigger" onclick="toggleMultiSelect('multi-tag-startups')">所有產業標籤</button>
+                        <div class="multi-select-menu" id="filter-tag-startups"></div>
+                    </div>
+                    <div class="multi-select" id="multi-market-startups">
+                        <button type="button" class="multi-select-trigger" onclick="toggleMultiSelect('multi-market-startups')">所有 TA Market</button>
+                        <div class="multi-select-menu" id="filter-market-startups"></div>
+                    </div>
+                </div>
+                <div class="grid" id="grid-startups"></div>
+            </div>
+
+            <!-- 頁面：歷史新創 -->
+            <div id="page-alumni" class="page">
+                <div class="controls-row">
+                    <input type="text" class="search-input" id="search-alumni" placeholder="搜尋公司名稱、簡介或產品關鍵字..." oninput="filterData('alumni')">
+                    <select class="filter-select" id="filter-year" onchange="filterData('alumni')">
+                        <option value="">所有畢業年份</option>
+                    </select>
+                    <div class="multi-select" id="multi-tag-alumni">
+                        <button type="button" class="multi-select-trigger" onclick="toggleMultiSelect('multi-tag-alumni')">所有產業標籤</button>
+                        <div class="multi-select-menu" id="filter-tag-alumni"></div>
+                    </div>
+                    <div class="multi-select" id="multi-market-alumni">
+                        <button type="button" class="multi-select-trigger" onclick="toggleMultiSelect('multi-market-alumni')">所有 TA Market</button>
+                        <div class="multi-select-menu" id="filter-market-alumni"></div>
+                    </div>
+                </div>
+                <div class="grid" id="grid-alumni"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 詳細資料彈窗 -->
+    <div class="modal" id="details-modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <button class="close-modal" onclick="document.getElementById('details-modal').classList.remove('active')">&times;</button>
+            <h2 id="modal-company-name" style="margin-bottom: 20px; color: var(--ink);">公司名稱</h2>
+            <div class="modal-body" id="modal-fields-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // 全域資料儲存：Apps Script 回傳 raw JSON，前端在這裡做欄位對照與標籤處理
+        let rawData = { startups: [], alumni: [] };
+
+        // 已寫死 Apps Script Web App URL；開啟 HTML 後會自動讀取資料
+        const API_BASE = 'https://script.google.com/macros/s/AKfycbxAtOD0mf-QVXfQWYWsfssWcHw7fBxuKncSI4n1iP5A7fmkzythFcMIan9_G1xNRkfhCA/exec';
+
+        const MARKET_OPTIONS = ['台灣', '日本', '歐美', '東南亞', '印度', '不明'];
+
+        // Google Sheet 原始欄位 → 網站標準欄位
+        // 未來 Google Sheet 新增欄位時，detail modal 仍會自動顯示原始欄位。
+        const FIELD_ALIASES = {
+            companyName: ['公司名稱', '公司全稱', 'Company Name', 'Startup Name', 'Name'],
+            description: ['公司簡介', '公司業務說明', '業務說明', 'Description'],
+            product: ['產品與服務', '產品服務', '產品/服務', 'Product', 'Service'],
+            scenario: ['主要應用場景', '應用場景', 'Application Scenario'],
+            customer: ['目標客戶', 'Target Customer'],
+            level: ['會員等級', '等級'],
+            year: ['成立年份', '公司成立時間', '成立時間', '成立日期'],
+            gradYear: ['畢業年分', '畢業年份', '畢業年度'],
+            market: ['海外發展狀態', 'TA Market', 'Target Market', '目標市場'],
+            industry: ['產業', '產業標籤', 'Industry']
+        };
+
+        const TAG_RULES = [
+            ['AI', /ai|人工智慧|機器學習|深度學習|llm|nlp|生成式|智慧辨識|演算法|computer vision|影像辨識|智能|自動判讀/],
+            ['Big Data', /big data|大數據|資料分析|數據分析|data analytics|資料平台|數據平台|數據|資料庫/],
+            ['Cloud Security', /資安|cybersecurity|security|雲端安全|零信任|威脅偵測|soc|ztna|隱私|加密/],
+            ['Education', /教育|學習|課程|edtech|教材|培訓|線上學習|教學|校園/],
+            ['Information Technology', /資訊|軟體|saas|平台|系統|雲端|api|it|software|資訊服務|app|數位/],
+            ['Manufacturing', /製造|工廠|產線|工業|生產|設備|自動化|智慧製造|mes|檢測|材料|製程/],
+            ['Semiconductor', /半導體|晶片|ic|封測|eda|矽|soc|npu|製程|晶圓/],
+            ['Sustainability', /永續|esg|碳|減碳|負碳|循環經濟|綠能|環保|能源|淨零|節能|回收/],
+            ['Healthcare', /醫療|健康|照護|醫院|病患|診療|慢性病|healthcare|medical|保健|醫材|醫學|生醫/],
+            ['FinTech', /金融|銀行|支付|保險|投資|借貸|fintech|區塊鏈|kyc|aml|理財/],
+            ['Smart City', /智慧城市|城市|交通|停車|路燈|市政|公共安全|定位|物流|車輛調度/],
+            ['IoT', /iot|物聯網|感測|sensor|智慧裝置|連網|邊緣運算|硬體整合/],
+            ['Biotech', /生技|生物|基因|蛋白|藥物|精準醫療|發酵|biotech|體組成|臨床/]
+        ];
+
+        window.onload = function() {
+            fetchDataFromSheets(API_BASE);
+        };
+
+        async function fetchDataFromSheets(apiUrl = API_BASE) {
+            const spinner = document.getElementById('loading-block');
+            spinner.classList.add('active');
+            try {
+                const cleanUrl = apiUrl.split('?')[0];
+                const [resStartups, resAlumni] = await Promise.all([
+                    fetch(`${cleanUrl}?type=startups`),
+                    fetch(`${cleanUrl}?type=alumni`)
+                ]);
+
+                const jsonStartups = await resStartups.json();
+                const jsonAlumni = await resAlumni.json();
+
+                if (jsonStartups.status !== 'ok') throw new Error(jsonStartups.message || 'startups API error');
+                if (jsonAlumni.status !== 'ok') throw new Error(jsonAlumni.message || 'alumni API error');
+
+                rawData.startups = jsonStartups.data.map(item => normalizeRawItem(item, 'startups'));
+                rawData.alumni = jsonAlumni.data.map(item => normalizeRawItem(item, 'alumni'));
+
+                populateFilterOptions();
+                renderGrid('startups');
+                renderGrid('alumni');
+
+                console.log('資料庫即時同步成功，共讀取', rawData.startups.length + rawData.alumni.length, '筆新創資料');
+            } catch (error) {
+                console.error(error);
+                alert('連線失敗！請檢查 Apps Script 是否成功部署，或確認網址輸入正確。');
+            } finally {
+                spinner.classList.remove('active');
+            }
+        }
+
+        function normalizeRawItem(raw, type) {
+            const companyName = getFirstValue(raw, FIELD_ALIASES.companyName);
+            const description = getFirstValue(raw, FIELD_ALIASES.description);
+            const product = getFirstValue(raw, FIELD_ALIASES.product);
+            const scenario = getFirstValue(raw, FIELD_ALIASES.scenario);
+            const customer = getFirstValue(raw, FIELD_ALIASES.customer);
+            const level = getFirstValue(raw, FIELD_ALIASES.level);
+            const year = normalizeYear(getFirstValue(raw, FIELD_ALIASES.year));
+            const gradYear = normalizeYear(getFirstValue(raw, FIELD_ALIASES.gradYear));
+            const marketRaw = getFirstValue(raw, FIELD_ALIASES.market);
+            const industryRaw = getFirstValue(raw, FIELD_ALIASES.industry);
+            const markets = normalizeMarkets(marketRaw);
+            const tags = detectIndustryTags(raw, { description, product, scenario, customer, industryRaw });
+
+            return {
+                ...raw,
+                // 標準欄位：供 HTML 顯示與搜尋篩選使用
+                '公司名稱': companyName,
+                '公司簡介': description,
+                '產品與服務': product,
+                '主要應用場景': scenario,
+                '目標客戶': customer,
+                '會員等級': level,
+                '成立年份': year,
+                '畢業年分': gradYear,
+                '海外發展狀態': marketRaw,
+                '產業': industryRaw,
+                tags,
+                markets,
+                _sourceType: type
+            };
+        }
+
+        function getFirstValue(item, keys) {
+            for (const key of keys) {
+                if (item[key] !== undefined && item[key] !== null && String(item[key]).trim() !== '') {
+                    return String(item[key]).trim();
+                }
+            }
+            return '';
+        }
+
+        function normalizeYear(value) {
+            if (!value) return '';
+            const match = String(value).match(/\d{4}/);
+            return match ? match[0] : String(value).trim();
+        }
+
+        function splitList(value) {
+            if (!value) return [];
+            return String(value)
+                .replace(/\r?\n/g, ',')
+                .split(/[、,，;；/|]+/)
+                .map(x => x.trim())
+                .filter(Boolean);
+        }
+
+        function normalizeMarkets(value) {
+            if (!value) return ['不明'];
+            const parts = splitList(value);
+            const markets = new Set();
+
+            const addMarket = (text) => {
+                const t = String(text).toLowerCase();
+                if (/台灣|臺灣|taiwan|tw/.test(t)) markets.add('台灣');
+                if (/日本|japan|jp/.test(t)) markets.add('日本');
+                if (/歐美|美國|歐洲|usa|u\.s\.|us|america|europe|eu|uk|英國|德國|法國|加拿大|澳洲/.test(t)) markets.add('歐美');
+                if (/東南亞|新加坡|馬來西亞|泰國|越南|印尼|菲律賓|singapore|malaysia|thailand|vietnam|indonesia|philippines|sea|asean/.test(t)) markets.add('東南亞');
+                if (/印度|india/.test(t)) markets.add('印度');
+                if (/待確認|不明|未知|na|n\/a|none|尚未/.test(t)) markets.add('不明');
+            };
+
+            if (parts.length) parts.forEach(addMarket);
+            else addMarket(value);
+
+            return markets.size ? Array.from(markets) : ['不明'];
+        }
+
+        function detectIndustryTags(raw, fields) {
+            const text = `${fields.description || ''} ${fields.product || ''} ${fields.scenario || ''} ${fields.customer || ''} ${fields.industryRaw || ''}`.toLowerCase();
+            const tags = new Set();
+
+            // 先保留 Sheet「產業」欄位內已經明確存在的標準標籤
+            splitList(fields.industryRaw).forEach(x => {
+                const normalized = normalizeIndustryLabel(x);
+                if (normalized) tags.add(normalized);
+            });
+
+            TAG_RULES.forEach(([tag, regex]) => {
+                if (regex.test(text)) tags.add(tag);
+            });
+
+            if (tags.size === 0) tags.add('Information Technology');
+            return Array.from(tags);
+        }
+
+        function normalizeIndustryLabel(value) {
+            const t = String(value).trim().toLowerCase();
+            const direct = ['ai', 'big data', 'cloud security', 'education', 'information technology', 'manufacturing', 'semiconductor', 'sustainability', 'healthcare', 'fintech', 'smart city', 'iot', 'biotech'];
+            for (const d of direct) {
+                if (t === d.toLowerCase()) return d.replace(/\b\w/g, c => c.toUpperCase()).replace('Iot', 'IoT').replace('Fintech', 'FinTech');
+            }
+            if (/醫療|健康|保健|生醫/.test(t)) return 'Healthcare';
+            if (/生技|生物|藥/.test(t)) return 'Biotech';
+            if (/金融/.test(t)) return 'FinTech';
+            if (/教育/.test(t)) return 'Education';
+            if (/半導體|晶片/.test(t)) return 'Semiconductor';
+            if (/製造|工業/.test(t)) return 'Manufacturing';
+            if (/永續|環保|綠能|碳/.test(t)) return 'Sustainability';
+            if (/智慧城市|政府|市政|交通/.test(t)) return 'Smart City';
+            if (/資安|安全/.test(t)) return 'Cloud Security';
+            if (/物聯網|感測/.test(t)) return 'IoT';
+            if (/資訊|數位|軟體|平台|科技/.test(t)) return 'Information Technology';
+            return '';
+        }
+
+        function escapeHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function populateFilterOptions() {
+            const levels = new Set(rawData.startups.map(i => i['會員等級']).filter(Boolean));
+            const filterLevel = document.getElementById('filter-level');
+            filterLevel.innerHTML = '<option value="">所有會員等級</option>';
+            [...levels].sort().forEach(l => filterLevel.innerHTML += `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`);
+
+            const years = new Set(rawData.alumni.map(i => i['畢業年分']).filter(Boolean));
+            const filterYear = document.getElementById('filter-year');
+            filterYear.innerHTML = '<option value="">所有畢業年份</option>';
+            [...years].sort((a,b) => String(b).localeCompare(String(a))).forEach(y => filterYear.innerHTML += `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`);
+
+            const allTags = new Set([...rawData.startups.flatMap(i => i.tags), ...rawData.alumni.flatMap(i => i.tags)]);
+            renderMultiOptions('filter-tag-startups', [...allTags].sort(), 'startups');
+            renderMultiOptions('filter-tag-alumni', [...allTags].sort(), 'alumni');
+
+            renderMultiOptions('filter-market-startups', MARKET_OPTIONS, 'startups');
+            renderMultiOptions('filter-market-alumni', MARKET_OPTIONS, 'alumni');
+            updateMultiLabels();
+        }
+
+        function renderMultiOptions(containerId, options, type) {
+            const el = document.getElementById(containerId);
+            el.innerHTML = options.map(opt => `
+                <label class="multi-option">
+                    <input type="checkbox" value="${escapeHtml(opt)}" onchange="filterData('${type}'); updateMultiLabels();">
+                    <span>${escapeHtml(opt)}</span>
+                </label>
+            `).join('');
+        }
+
+        function getCheckedValues(containerId) {
+            return [...document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)].map(cb => cb.value);
+        }
+
+        function toggleMultiSelect(id) {
+            document.querySelectorAll('.multi-select').forEach(el => {
+                if (el.id !== id) el.classList.remove('open');
+            });
+            document.getElementById(id).classList.toggle('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.multi-select')) {
+                document.querySelectorAll('.multi-select').forEach(el => el.classList.remove('open'));
+            }
+        });
+
+        function updateMultiLabels() {
+            const configs = [
+                ['multi-tag-startups', 'filter-tag-startups', '所有產業標籤'],
+                ['multi-tag-alumni', 'filter-tag-alumni', '所有產業標籤'],
+                ['multi-market-startups', 'filter-market-startups', '所有 TA Market'],
+                ['multi-market-alumni', 'filter-market-alumni', '所有 TA Market']
+            ];
+            configs.forEach(([wrapId, menuId, defaultText]) => {
+                const values = getCheckedValues(menuId);
+                const btn = document.querySelector(`#${wrapId} .multi-select-trigger`);
+                if (!btn) return;
+                btn.textContent = values.length ? `${defaultText}：${values.join('、')}` : defaultText;
+            });
+        }
+
+        function renderGrid(type, filteredData = null) {
+            const data = filteredData || rawData[type];
+            const grid = document.getElementById(`grid-${type}`);
+            grid.innerHTML = '';
+
+            if (data.length === 0) {
+                grid.innerHTML = '<div style="color: var(--ink-faint); padding: 20px;">沒有符合篩選條件的新創資料。</div>';
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => showModal(item);
+
+                const tagHtml = item.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+                const marketHtml = item.markets.map(t => `<span class="tag tag-market">${escapeHtml(t)}</span>`).join('');
+                const subBadge = type === 'startups'
+                    ? (item['會員等級'] || '一般會員')
+                    : ((item['畢業年分'] || '') ? `${item['畢業年分']} 畢業` : '歷史新創');
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">${escapeHtml(item['公司名稱'])}</div>
+                        <span class="badge badge-level">${escapeHtml(subBadge)}</span>
+                    </div>
+                    <div class="card-desc">${escapeHtml(item['公司簡介'] || item['產業'] || '暫無簡介描述。')}</div>
+                    <div class="market-tags">${marketHtml}</div>
+                    <div class="tag-container" style="margin-top:auto;">${tagHtml}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterData(type) {
+            const query = document.getElementById(`search-${type}`).value.toLowerCase();
+            let data = rawData[type];
+
+            if (query) {
+                data = data.filter(item => {
+                    const searchable = [
+                        item['公司名稱'], item['公司簡介'], item['產品與服務'],
+                        item['主要應用場景'], item['目標客戶'], item['產業'],
+                        item['公司全稱'], item['公司業務說明']
+                    ].join(' ').toLowerCase();
+                    return searchable.includes(query);
+                });
+            }
+
+            const tagFilters = getCheckedValues(`filter-tag-${type}`);
+            const marketFilters = getCheckedValues(`filter-market-${type}`);
+
+            if (tagFilters.length) data = data.filter(i => tagFilters.some(tag => i.tags.includes(tag)));
+            if (marketFilters.length) data = data.filter(i => marketFilters.some(market => i.markets.includes(market)));
+
+            if (type === 'startups') {
+                const level = document.getElementById('filter-level').value;
+                if (level) data = data.filter(i => i['會員等級'] === level);
+            } else {
+                const year = document.getElementById('filter-year').value;
+                if (year) data = data.filter(i => i['畢業年分'] === year);
+            }
+
+            renderGrid(type, data);
+        }
+
+        function showModal(item) {
+            document.getElementById('modal-company-name').innerText = item['公司名稱'];
+            const container = document.getElementById('modal-fields-container');
+            container.innerHTML = '';
+
+            const preferredOrder = [
+                '公司名稱', '公司全稱', '會員等級', '等級', 'Premium', '成立年份', '公司成立時間',
+                '產業', '產業標籤', '公司簡介', '公司業務說明', '產品與服務', '主要應用場景',
+                '目標客戶', '海外發展狀態', 'TA Market', '官方網站', '統一編號', '登記縣市',
+                '登記地址', '郵遞區號', '聯絡地址', '公司電話', '負責人', '負責人職稱',
+                '負責人電話', '負責人連絡信箱'
+            ];
+
+            const shown = new Set();
+            preferredOrder.forEach(key => {
+                if (item[key] !== undefined && item[key] !== '') {
+                    appendModalField(container, key, item[key]);
+                    shown.add(key);
+                }
+            });
+
+            Object.entries(item).forEach(([key, value]) => {
+                if (shown.has(key) || key === 'tags' || key === 'markets' || key === '_sourceType') return;
+                if (value === undefined || value === null || value === '') return;
+                appendModalField(container, key, value);
+            });
+
+            appendModalField(container, 'TA Market 拆分標籤', item.markets.map(t => `<span class="tag tag-market">${escapeHtml(t)}</span>`).join(''), true);
+            appendModalField(container, '系統辨識產業標籤', item.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join(''), true);
+
+            document.getElementById('details-modal').classList.add('active');
+        }
+
+        function appendModalField(container, label, value, isHtml = false) {
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'modal-field';
+            fieldDiv.innerHTML = `
+                <div class="modal-label">${escapeHtml(label)}</div>
+                <div class="modal-value">${isHtml ? value : escapeHtml(value || '—')}</div>
+            `;
+            container.appendChild(fieldDiv);
+        }
+
+        function closeModal(e) {
+            if (e.target.id === 'details-modal') {
+                document.getElementById('details-modal').classList.remove('active');
+            }
+        }
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            if (window.event && window.event.currentTarget) window.event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
