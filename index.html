@@ -5,45 +5,495 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>IAPS Accelerator OS</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800&display=swap');
 :root{
-  --bg:#f8fafc;
+  --bg:#f6f7f9;
   --panel:#ffffff;
-  --ink:#0f172a;
-  --muted:#64748b;
-  --line:#e2e8f0;
-  --soft:#f1f5f9;
-  --blue:#2563eb;
-  --blue2:#eff6ff;
+  --ink:#111827;
+  --ink-2:#374151;
+  --muted:#6b7280;
+  --faint:#9ca3af;
+  --line:#e5e7eb;
+  --line-2:#f3f4f6;
+  --blue:#1d4ed8;
+  --blue-mid:#2563eb;
+  --blue-lt:#eff6ff;
+  --blue-border:#bfdbfe;
   --green:#059669;
-  --green2:#ecfdf5;
+  --green-lt:#ecfdf5;
   --orange:#d97706;
-  --orange2:#fffbeb;
-  --purple:#7c3aed;
-  --purple2:#f5f3ff;
+  --orange-lt:#fffbeb;
+  --purple:#6d28d9;
+  --purple-lt:#f5f3ff;
   --cyan:#0891b2;
-  --cyan2:#ecfeff;
+  --cyan-lt:#ecfeff;
   --red:#dc2626;
-  --shadow:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
-  --shadow-hover:0 10px 24px rgba(15,23,42,.08);
-  --radius:16px;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.03);
+  --shadow-md:0 4px 12px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.04);
+  --shadow-hover:0 8px 24px rgba(0,0,0,.09);
+  --radius:12px;
+  --radius-sm:8px;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",Arial,sans-serif;background:var(--bg);color:var(--ink);letter-spacing:-.01em}
-.topbar{min-height:76px;background:#fff;color:var(--ink);display:flex;align-items:center;gap:18px;padding:14px 24px;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
-.logo{font-weight:900;display:flex;align-items:center;gap:10px;font-size:19px;letter-spacing:-.03em}.logo:before{content:'🚀';display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--blue);color:#fff;border-radius:14px;box-shadow:0 8px 20px rgba(37,99,235,.18)}.dot{display:none}.global-search{background:#f8fafc;border:1px solid var(--line);border-radius:12px;color:#0f172a;padding:11px 14px;min-width:360px;outline:none;font-size:14px}.global-search:focus{border-color:#93c5fd;box-shadow:0 0 0 3px rgba(37,99,235,.12)}.refresh{margin-left:auto;background:var(--blue);color:white;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:800;box-shadow:0 8px 18px rgba(37,99,235,.18)}.refresh:hover{background:#1d4ed8}
-.layout{display:flex}.sidebar{width:246px;background:#fff;border-right:1px solid var(--line);min-height:calc(100vh - 76px);padding:18px 14px;position:sticky;top:76px}.side-title{font-size:11px;color:#94a3b8;margin:16px 10px 8px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.nav{width:100%;display:flex;align-items:center;gap:10px;background:transparent;border:0;border-radius:12px;padding:11px 13px;margin:4px 0;color:#475569;font-weight:750;cursor:pointer;text-align:left;transition:.16s ease}.nav.active,.nav:hover{background:var(--blue2);color:var(--blue)}.nav-group{margin-bottom:10px}
-.main{flex:1;padding:24px;min-width:0;max-width:1400px;margin:0 auto}.page{display:none}.page.active{display:block}.page-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}.page-title{font-size:24px;font-weight:900;margin:0;letter-spacing:-.04em}.subtitle{font-size:13px;color:var(--muted);margin-top:6px}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.p16{padding:18px}.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.kpi{border-top:0;min-height:104px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}.kpi:after{content:'';position:absolute;right:18px;top:18px;width:42px;height:42px;border-radius:14px;background:var(--blue2)}.kpi.green:after{background:var(--green2)}.kpi.orange:after{background:var(--orange2)}.kpi.cyan:after{background:var(--cyan2)}.kpi small{color:#64748b;font-weight:750;font-size:13px}.kpi .num{font-size:30px;font-weight:900;margin-top:8px;letter-spacing:-.05em}.section{margin-top:18px}.section h3{font-size:16px;margin:0 0 12px;font-weight:900;letter-spacing:-.02em}.list-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc;padding:11px 12px;border-radius:12px;margin:8px 0;cursor:pointer;border:1px solid #eef2f7}.list-row:hover{background:var(--blue2);border-color:#bfdbfe}.list-row .date{font-size:12px;color:#64748b}.bar-row{display:grid;grid-template-columns:112px 1fr 48px;align-items:center;gap:10px;margin:10px 0;font-size:13px}.bar-bg{height:10px;background:#edf2f7;border-radius:999px;overflow:hidden}.bar-fill{height:100%;background:var(--blue);border-radius:999px}.treemap{display:flex;flex-wrap:wrap;gap:8px;min-height:210px}.tile{min-width:120px;min-height:74px;flex:1 1 150px;border-radius:14px;color:white;padding:10px;font-size:12px;font-weight:850;display:flex;align-items:flex-end;justify-content:flex-end;text-align:right;cursor:pointer;overflow:hidden;box-shadow:var(--shadow)}.tile:hover{filter:brightness(.98);transform:translateY(-1px)}
-.filters{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;background:white;border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:16px;box-shadow:var(--shadow)}.field label{display:block;font-size:12px;font-weight:850;margin:0 0 6px;color:#64748b}.field input,.field select,.multi-btn{height:40px;border:1px solid var(--line);background:#f8fafc;border-radius:11px;padding:0 12px;min-width:142px;color:#334155;outline:none}.field input{min-width:240px}.field input:focus,.field select:focus{border-color:#93c5fd;box-shadow:0 0 0 3px rgba(37,99,235,.10)}.btn{height:40px;border:0;border-radius:11px;padding:0 14px;background:#eef2f7;color:#334155;font-weight:850;cursor:pointer}.btn:hover{background:#e2e8f0}.btn.primary{background:var(--blue);color:white}.toggle{margin-left:auto;display:flex;gap:8px}.multi{position:relative}.multi-btn{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;font-weight:750;background:#fff}.multi-menu{display:none;position:absolute;z-index:20;top:48px;left:0;width:270px;max-height:290px;overflow:auto;background:white;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgba(15,23,42,.14);padding:8px}.multi.open .multi-menu{display:block}.multi-menu label{display:flex!important;align-items:center;gap:8px;padding:8px 9px;border-radius:9px;white-space:normal;font-size:13px;color:#1f2937;cursor:pointer}.multi-menu label:hover{background:#f1f5f9}.multi-menu input[type="checkbox"]{width:16px!important;height:16px!important;min-width:16px!important;margin:0!important;flex-shrink:0!important;appearance:auto!important}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:var(--radius);background:white;box-shadow:var(--shadow)}.table{width:100%;border-collapse:collapse;min-width:1050px}.table th,.table td{padding:14px 16px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;vertical-align:top}.table th{background:#f8fafc;color:#475569;font-weight:900}.table tr:hover{background:#fbfdff}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}.startup-card{padding:18px;cursor:pointer;transition:.16s ease}.startup-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:#bfdbfe}.card-title{font-size:17px;font-weight:900;margin-bottom:8px;letter-spacing:-.03em}.desc{color:#475569;line-height:1.65;font-size:13px;margin:9px 0 12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.tags{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}.tag{display:inline-flex;align-items:center;border-radius:999px;background:var(--blue2);color:#1d4ed8;font-size:12px;font-weight:800;padding:5px 9px;line-height:1}.tag.premium{background:var(--orange2);color:#b45309}.tag.level{background:var(--purple2);color:#6d28d9}.tag.market{background:var(--green2);color:#047857}.meta{display:flex;gap:18px;flex-wrap:wrap;color:#64748b;font-size:13px;margin-top:12px}.arrow{color:var(--blue);font-weight:900}.empty{padding:32px;color:#94a3b8;text-align:center}
-.detail{display:none}.detail.active{display:block}.detail-hero{display:flex;justify-content:space-between;gap:18px;padding:22px}.detail-title{font-size:26px;font-weight:900;letter-spacing:-.05em}.detail-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px}.kv{margin:0 0 16px}.kv b{display:block;font-size:12px;color:#64748b;margin-bottom:6px;font-weight:900;text-transform:uppercase;letter-spacing:.02em}.kv div{font-size:14px;line-height:1.7;color:#334155}.back{background:white;border:1px solid var(--line);border-radius:11px;padding:9px 13px;cursor:pointer;font-weight:850;color:#334155}.edit{background:var(--orange2);border:1px solid #fed7aa;color:#c2410c;border-radius:11px;padding:9px 13px;cursor:pointer;font-weight:850}.partner-card{padding:18px}.partner-card .name{font-weight:900;margin-bottom:8px;letter-spacing:-.02em}.muted{color:#64748b;font-size:13px;line-height:1.6}
-.category-panel{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.category-chip{border:1px solid var(--line);background:white;border-radius:999px;padding:9px 13px;font-weight:850;font-size:13px;cursor:pointer;color:#334155;box-shadow:var(--shadow)}.category-chip.active,.category-chip:hover{background:var(--blue2);color:var(--blue);border-color:#bfdbfe}.similar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:10px}.similar-card{border:1px solid var(--line);background:#f8fafc;border-radius:14px;padding:13px;cursor:pointer}.similar-card:hover{background:#eef6ff;border-color:#bfdbfe}.similar-card .sim-name{font-weight:900;font-size:13px;margin-bottom:6px}.similar-card .sim-score{font-size:12px;color:#64748b}.overview-note{font-size:12px;color:#94a3b8;margin-top:10px}
-@media(max-width:980px){.grid4,.grid2,.grid3,.detail-grid{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px}.topbar{padding:12px;flex-wrap:wrap}.global-search{min-width:0;flex:1}.refresh{margin-left:0}.toggle{margin-left:0}.cards{grid-template-columns:1fr}}
+html{font-size:14px}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.5;
+  letter-spacing:-.006em;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  height:56px;background:#0f172a;color:#fff;
+  display:flex;align-items:center;gap:16px;padding:0 20px;
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.topbar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#3b82f6 0%,#6366f1 50%,#8b5cf6 100%);
+}
+.logo{
+  font-weight:700;font-size:14px;letter-spacing:-.01em;
+  color:#fff;white-space:nowrap;display:flex;align-items:center;gap:10px;
+}
+.logo:before{
+  content:'';display:inline-block;
+  width:26px;height:26px;border-radius:7px;flex-shrink:0;
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+}
+.dot{display:none}
+.global-search{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-sm);color:#fff;padding:8px 12px;
+  min-width:320px;outline:none;font-size:13px;
+  transition:border-color .15s,background .15s;
+}
+.global-search::placeholder{color:rgba(255,255,255,.3)}
+.global-search:focus{background:rgba(255,255,255,.1);border-color:rgba(99,102,241,.6)}
+.refresh{
+  margin-left:auto;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-sm);padding:7px 14px;cursor:pointer;
+  font-size:12px;font-weight:600;letter-spacing:.01em;transition:.15s;
+}
+.refresh:hover{background:rgba(255,255,255,.17)}
+.export-btn{
+  background:rgba(255,255,255,.1);color:#e0e7ff;border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-sm);padding:7px 14px;cursor:pointer;
+  font-size:12px;font-weight:600;transition:.15s;
+}
+.export-btn:hover{background:rgba(255,255,255,.17)}
+
+/* ─── SIDEBAR ─── */
+.layout{display:flex}
+.sidebar{
+  width:224px;background:var(--panel);border-right:1px solid var(--line);
+  min-height:calc(100vh - 56px);padding:14px 10px;
+  position:sticky;top:56px;overflow-y:auto;flex-shrink:0;
+}
+.side-title{
+  font-size:10px;color:var(--faint);margin:16px 10px 5px;
+  font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+}
+.side-title:first-child{margin-top:4px}
+.nav{
+  width:100%;display:flex;align-items:center;gap:9px;
+  background:transparent;border:0;border-radius:var(--radius-sm);
+  padding:8px 11px;margin:1px 0;color:var(--muted);
+  font-weight:500;font-size:13px;cursor:pointer;text-align:left;
+  transition:background .13s,color .13s;white-space:nowrap;
+}
+.nav:hover{background:var(--bg);color:var(--ink-2)}
+.nav.active{background:var(--blue-lt);color:var(--blue);font-weight:600}
+.nav-group{margin-bottom:2px}
+
+/* ─── MAIN ─── */
+.main{flex:1;padding:24px 28px;min-width:0;max-width:1380px;margin:0 auto}
+.page{display:none}.page.active{display:block}
+.detail{display:none}.detail.active{display:block}
+
+/* ─── PAGE HEADER ─── */
+.page-head{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:20px;gap:12px;flex-wrap:wrap;
+}
+.page-title{font-size:18px;font-weight:700;margin:0;letter-spacing:-.02em;color:var(--ink)}
+.subtitle{font-size:12.5px;color:var(--muted);margin-top:4px;font-weight:400}
+
+/* ─── CARD ─── */
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.p16{padding:16px}
+
+/* ─── GRIDS ─── */
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+
+/* ─── KPI CARDS ─── */
+.kpi{
+  min-height:92px;display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.kpi::after{
+  content:'';position:absolute;top:16px;right:16px;
+  width:34px;height:34px;border-radius:10px;background:var(--blue-lt);
+}
+.kpi.green::after{background:var(--green-lt)}
+.kpi.orange::after{background:var(--orange-lt)}
+.kpi.cyan::after{background:var(--cyan-lt)}
+.kpi small{
+  font-size:11.5px;color:var(--muted);font-weight:500;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.kpi .num{
+  font-size:26px;font-weight:700;margin-top:6px;
+  letter-spacing:-.03em;color:var(--ink);line-height:1.1;
+}
+.kpi.clickable{cursor:pointer;transition:transform .15s,box-shadow .15s}
+.kpi.clickable:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+
+/* ─── SECTIONS ─── */
+.section{margin-top:16px}
+.section h3{
+  font-size:13px;margin:0 0 12px;font-weight:600;
+  color:var(--ink-2);letter-spacing:-.005em;
+}
+
+/* ─── LIST ROWS ─── */
+.list-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--bg);padding:10px 12px;border-radius:var(--radius-sm);
+  margin:6px 0;cursor:pointer;border:1px solid transparent;
+  font-size:13px;transition:.12s;
+}
+.list-row:hover{background:var(--blue-lt);border-color:var(--blue-border)}
+.list-row .date{font-size:11.5px;color:var(--muted)}
+
+/* ─── BAR CHART ─── */
+.bar-row{
+  display:grid;grid-template-columns:108px 1fr 42px;
+  align-items:center;gap:10px;margin:9px 0;font-size:12.5px;
+}
+.bar-bg{height:7px;background:var(--line-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:var(--blue-mid);border-radius:99px;transition:width .5s}
+
+/* ─── TREEMAP ─── */
+.treemap{display:flex;flex-wrap:wrap;gap:6px;min-height:200px}
+.tile{
+  min-width:110px;min-height:64px;flex:1 1 140px;
+  border-radius:var(--radius-sm);color:#fff;padding:10px;
+  font-size:11.5px;font-weight:600;
+  display:flex;align-items:flex-end;justify-content:flex-end;
+  text-align:right;cursor:pointer;overflow:hidden;
+  transition:filter .15s,transform .15s;
+}
+.tile:hover{filter:brightness(.95);transform:translateY(-1px)}
+
+/* ─── YEAR CHART ─── */
+.yr-chart{display:flex;align-items:flex-end;gap:9px;height:160px;overflow-x:auto;padding:4px 2px 0}
+.yr-col{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:40px}
+.yr-num{font-size:11.5px;font-weight:600;color:var(--ink-2)}
+.yr-bar{
+  width:24px;background:linear-gradient(180deg,#60a5fa 0%,#1d4ed8 100%);
+  border-radius:5px 5px 2px 2px;min-height:4px;transition:height .4s;
+}
+.yr-lbl{font-size:10.5px;color:var(--muted);font-weight:500}
+
+/* ─── FILTERS ─── */
+.filters{
+  display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius);padding:13px 14px;margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.field label{
+  display:block;font-size:11px;font-weight:600;margin:0 0 5px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.04em;
+}
+.field input,.field select,.multi-btn{
+  height:36px;border:1px solid var(--line);background:var(--bg);
+  border-radius:var(--radius-sm);padding:0 10px;min-width:136px;
+  color:var(--ink-2);outline:none;font-size:13px;
+  transition:border-color .13s;
+}
+.field input{min-width:220px}
+.field input:focus,.field select:focus{border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.btn{
+  height:36px;border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:0 14px;background:var(--panel);color:var(--ink-2);
+  font-size:13px;font-weight:500;cursor:pointer;transition:.13s;
+}
+.btn:hover{background:var(--bg);border-color:var(--blue-border);color:var(--blue)}
+.btn.primary{background:var(--blue-mid);color:#fff;border-color:var(--blue-mid)}
+.btn.primary:hover{background:var(--blue)}
+.toggle{margin-left:auto;display:flex;gap:8px}
+.view-toolbar{display:flex;justify-content:flex-end;gap:8px;margin:0 0 10px}
+.bulk-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;margin:-4px 0 14px;box-shadow:var(--shadow)}
+
+/* ─── MULTI SELECT ─── */
+.multi{position:relative}
+.multi-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;cursor:pointer;font-weight:500;background:var(--bg);
+}
+.multi-btn:hover{border-color:var(--blue-border)}
+.multi-menu{
+  display:none;position:absolute;z-index:50;top:42px;left:0;
+  width:260px;max-height:280px;overflow:auto;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius);padding:7px;
+  box-shadow:0 16px 40px rgba(0,0,0,.12);
+}
+.multi.open .multi-menu{display:block}
+.multi-menu label{
+  display:flex!important;align-items:center;gap:8px;padding:7px 9px;
+  border-radius:6px;white-space:normal;font-size:13px;
+  color:var(--ink-2);cursor:pointer;
+}
+.multi-menu label:hover{background:var(--bg)}
+.multi-menu input[type="checkbox"]{
+  width:14px!important;height:14px!important;min-width:14px!important;
+  margin:0!important;flex-shrink:0!important;appearance:auto!important;
+}
+
+/* ─── TABLE ─── */
+.table-wrap{
+  overflow:auto;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--panel);box-shadow:var(--shadow);
+}
+.table{width:100%;border-collapse:collapse;min-width:1020px}
+.table th{
+  padding:10px 14px;text-align:left;
+  font-size:11px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--muted);
+  background:var(--bg);border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+.table td{
+  padding:12px 14px;font-size:13px;color:var(--ink-2);
+  border-bottom:1px solid var(--line-2);vertical-align:top;
+}
+.table tr:last-child td{border-bottom:none}
+.table tbody tr{cursor:pointer;transition:background .1s}
+.table tbody tr:hover td{background:var(--bg)}
+
+/* ─── STARTUP CARDS ─── */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.startup-card{padding:16px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.startup-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--blue-border)}
+.card-title{font-size:14px;font-weight:650;margin-bottom:6px;letter-spacing:-.01em;color:var(--ink)}
+.desc{
+  color:var(--muted);line-height:1.6;font-size:12.5px;
+  margin:7px 0 11px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}
+.tag{
+  display:inline-flex;align-items:center;border-radius:5px;
+  background:var(--blue-lt);color:var(--blue);
+  font-size:11.5px;font-weight:500;padding:3px 8px;line-height:1;
+}
+.tag.premium{background:var(--orange-lt);color:var(--orange)}
+.tag.level{background:var(--purple-lt);color:var(--purple)}
+.tag.market{background:var(--green-lt);color:var(--green)}
+.tag.service{background:var(--orange-lt);color:var(--orange)}
+.tag.impact{background:var(--green-lt);color:var(--green);font-weight:600}
+.tag.zero{background:var(--bg);color:var(--faint)}
+.meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin-top:10px}
+.arrow{color:var(--blue);font-weight:600}
+.empty{padding:40px;color:var(--faint);text-align:center;font-size:13px}
+
+/* ─── DETAIL PAGE ─── */
+.detail-hero{
+  display:flex;justify-content:space-between;gap:16px;padding:20px;
+}
+.detail-title{font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.detail-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}
+.kv{margin:0 0 14px}
+.kv b{
+  display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px;
+  font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+}
+.kv div{font-size:13px;line-height:1.65;color:var(--ink-2)}
+.back{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:8px 13px;cursor:pointer;
+  font-weight:500;font-size:13px;color:var(--ink-2);transition:.13s;
+}
+.back:hover{border-color:var(--blue-border);color:var(--blue)}
+.edit{
+  background:var(--orange-lt);border:1px solid #fed7aa;color:var(--orange);
+  border-radius:var(--radius-sm);padding:8px 13px;cursor:pointer;
+  font-weight:500;font-size:13px;
+}
+
+/* ─── PARTNER CARDS ─── */
+.partner-card{padding:16px;cursor:pointer;transition:.15s}
+.partner-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.partner-card .name{font-weight:600;margin-bottom:6px;font-size:14px;color:var(--ink)}
+.muted{color:var(--muted);font-size:12.5px;line-height:1.55}
+.category-panel{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}
+.category-chip{
+  border:1px solid var(--line);background:var(--panel);border-radius:99px;
+  padding:7px 13px;font-weight:500;font-size:12.5px;cursor:pointer;color:var(--ink-2);
+  transition:.13s;
+}
+.category-chip.active,.category-chip:hover{background:var(--blue-lt);color:var(--blue);border-color:var(--blue-border)}
+.partner-avatar{
+  width:48px;height:48px;border-radius:12px;background:var(--blue-lt);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:var(--blue);
+}
+.partner-hero{display:flex;gap:14px;align-items:flex-start}
+
+/* ─── ADAPT TABLE ─── */
+.adapt-table{width:100%;border-collapse:collapse}
+.adapt-table th{
+  text-align:left;font-size:10.5px;color:var(--muted);font-weight:600;
+  padding:9px 11px;border-bottom:1px solid var(--line);background:var(--bg);
+  text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;
+}
+.adapt-table td{padding:11px;border-bottom:1px solid var(--line-2);font-size:12.5px;vertical-align:top}
+.adapt-table tr:last-child td{border-bottom:none}
+.adapt-table tr:hover td{background:var(--bg)}
+.adapt-name{color:var(--blue);font-weight:600;cursor:pointer}
+.adapt-name:hover{text-decoration:underline}
+.adapt-score{font-weight:700;color:var(--blue);text-align:right}
+.detail-side .kv:last-child{margin-bottom:0}
+
+/* ─── SIMILAR CARDS ─── */
+.similar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin-top:9px}
+.similar-card{
+  border:1px solid var(--line);background:var(--bg);
+  border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:.13s;
+}
+.similar-card:hover{background:var(--blue-lt);border-color:var(--blue-border)}
+.similar-card .sim-name{font-weight:600;font-size:13px;margin-bottom:5px;color:var(--ink)}
+.similar-card .sim-score{font-size:11.5px;color:var(--muted)}
+.overview-note{font-size:11.5px;color:var(--faint);margin-top:10px}
+
+/* ─── EVENT CARDS ─── */
+.event-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden;
+}
+.event-head{
+  padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;
+  justify-content:space-between;gap:12px;transition:background .12s;
+}
+.event-head:hover{background:var(--bg)}
+.event-name{font-size:14px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px;color:var(--ink)}
+.event-meta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--muted)}
+.event-meta .ico{margin-right:3px;opacity:.65}
+.event-meta .ok{color:var(--green);font-weight:600}
+.event-chevron{font-size:11px;color:var(--faint);transition:transform .18s;flex-shrink:0;margin-top:3px}
+.event-card.open .event-chevron{transform:rotate(180deg)}
+.event-body{display:none;padding:0 16px 16px;border-top:1px solid var(--line-2)}
+.event-card.open .event-body{display:block;padding-top:14px}
+.event-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.event-col-title{
+  font-size:10.5px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px;
+}
+.event-people{display:flex;flex-direction:column;gap:5px}
+.event-people a,.event-people span{font-size:13px;color:var(--ink-2)}
+.event-people a{color:var(--blue);cursor:pointer;text-decoration:none}
+.event-people a:hover{text-decoration:underline}
+.event-result{margin-top:16px}
+.event-result-title{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.event-result p{font-size:13px;color:var(--ink-2);line-height:1.65;margin:0}
+.event-case{
+  margin-top:12px;background:var(--blue-lt);border:1px solid var(--blue-border);
+  border-radius:var(--radius-sm);padding:12px 14px;
+}
+.event-case-title{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px}
+.event-case p{font-size:13px;color:#1e3a8a;line-height:1.65;margin:0}
+.event-year-tag{
+  flex-shrink:0;font-size:10.5px;font-weight:600;padding:4px 9px;
+  border-radius:5px;background:var(--purple-lt);color:var(--purple);white-space:nowrap;
+}
+.event-service-summary{margin-top:9px;display:flex;gap:7px;flex-wrap:wrap}
+.event-service-box{margin-top:14px;background:var(--bg);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px}
+.event-service-title{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px}
+.event-service-item{border-left:3px solid var(--line);padding:9px 11px;background:var(--panel);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:7px 0}
+.event-service-item.impact{border-left-color:var(--green);background:var(--green-lt)}
+.event-service-company{font-weight:600;font-size:13px;color:var(--ink);margin-bottom:3px}
+.event-service-desc{font-size:12.5px;color:var(--muted);line-height:1.55}
+
+/* ─── SERVICE HEAT ─── */
+.service-heat{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:5px 0 8px}
+.heat-dots{letter-spacing:2px;font-size:16px;line-height:1;color:#e5e7eb}
+.heat-dots.high{color:var(--orange)}.heat-dots.medium{color:var(--blue-mid)}.heat-dots.low{color:var(--faint)}.heat-dots.none{color:#e5e7eb}
+.service-meta{font-size:12px;color:var(--muted);margin-top:7px;display:flex;gap:12px;flex-wrap:wrap}
+.service-section{margin-top:14px}
+.service-record{
+  border-left:3px solid var(--line);background:var(--bg);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:11px 13px;margin:9px 0;
+}
+.service-record.impact{border-left-color:var(--green);background:var(--green-lt)}
+.service-record-head{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:5px;
+}
+.service-record-body{font-size:12.5px;color:var(--muted);line-height:1.6}
+.service-record-link{font-size:11.5px;margin-top:5px}
+.service-record-link a{color:var(--blue);text-decoration:none;font-weight:500}
+.service-record-link a:hover{text-decoration:underline}
+
+/* ─── OVERVIEW IMPACT ─── */
+.overview-service-list{display:flex;flex-direction:column;gap:9px}
+.overview-service-row{display:grid;grid-template-columns:150px 1fr 44px;align-items:center;gap:10px;font-size:13px}
+.overview-service-name{font-weight:600;color:var(--ink-2)}
+.overview-impact-row{
+  display:grid;grid-template-columns:1.3fr .9fr .8fr;gap:10px;align-items:start;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:11px 12px;margin:7px 0;transition:.12s;
+}
+.overview-impact-row:hover{border-color:var(--blue-border)}
+.overview-impact-company{font-weight:600;font-size:13px;color:var(--ink);cursor:pointer}
+.overview-impact-company:hover{color:var(--blue);text-decoration:underline}
+.overview-impact-type{
+  font-size:11.5px;font-weight:600;color:var(--green);background:var(--green-lt);
+  border-radius:5px;padding:4px 8px;display:inline-flex;width:max-content;
+}
+.overview-impact-meta{font-size:11.5px;color:var(--muted);line-height:1.5}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:980px){
+  .grid4,.grid2,.grid3,.detail-grid{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{padding:16px}
+  .topbar{padding:0 14px;flex-wrap:wrap;height:auto;min-height:56px}
+  .global-search{min-width:0;flex:1}
+  .refresh{margin-left:0}
+  .toggle{margin-left:0}
+  .cards{grid-template-columns:1fr}
+}
 </style>
+
+<style>
+.iaps-footer{
+    margin-top:40px;
+    padding:18px 0 24px;
+    text-align:center;
+    font-size:12px;
+    color:#9ca3af;
+    border-top:1px solid #e5e7eb;
+    line-height:1.6;
+}
+</style>
+
 </head>
 <body>
-<div class="topbar"><div class="logo"><span class="dot"></span>IAPS Accelerator <span style="color:#2563eb">OS</span></div><input class="global-search" id="globalSearch" placeholder="搜尋新創、合作對象、活動..." oninput="globalSearch()"><button class="refresh" onclick="loadAll()">↻ 重新整理</button></div>
-<div class="layout"><aside class="sidebar"><div class="side-title">總覽</div><div class="nav-group"><button class="nav active" onclick="showPage('overview')">📊 Overview Dashboard</button></div><div class="side-title">資料庫</div><div class="nav-group"><button class="nav" onclick="showPage('startups')">🚀 新創資料庫</button><button class="nav" onclick="showPage('alumni')">🎓 歷史新創</button><button class="nav" onclick="showPage('partners')">🤝 合作對象</button><button class="nav" onclick="showPage('events')">🗓️ 活動紀錄</button></div><div class="side-title">智慧工具</div><div class="nav-group"><button class="nav" onclick="showPage('match')">🤖 AI 媒合中心</button></div><div class="side-title">系統</div><button class="nav" onclick="editData()">🔄 更新資料</button></aside>
+<div class="topbar"><div class="logo"><span class="dot"></span>IAPS Accelerator <span style="color:#2563eb">OS</span></div><input class="global-search" id="globalSearch" placeholder="搜尋新創、合作對象、活動..." oninput="globalSearch()"><button class="refresh" onclick="loadAll()">↻ 重新整理</button><button class="export-btn" onclick="exportCurrentView()">⇩ 匯出</button></div>
+<div class="layout"><aside class="sidebar"><div class="side-title">總覽</div><div class="nav-group"><button class="nav active" onclick="showPage('overview')">Overview Dashboard</button></div><div class="side-title">資料庫</div><div class="nav-group"><button class="nav" onclick="showPage('startups')">新創資料庫</button><button class="nav" onclick="showPage('alumni')">歷史新創</button><button class="nav" onclick="showPage('partners')">合作對象</button><button class="nav" onclick="showPage('events')">活動紀錄</button></div><div class="side-title">智慧工具</div><div class="nav-group"><button class="nav" onclick="showPage('match')">AI 媒合中心</button></div><div class="side-title">系統</div><button class="nav" onclick="editData()">更新資料</button></aside>
 <main class="main">
 <section class="page active" id="page-overview"></section>
 <section class="page" id="page-startups"></section>
@@ -53,11 +503,12 @@ body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Ro
 <section class="page" id="page-match"></section>
 <section class="detail" id="detail"></section>
 </main></div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
-const API_BASE='https://script.google.com/macros/s/AKfycbzHbAmYvaKnUEqksBHzEUnEB3-mUwjbcdOHuBpdFiPI5S8bLHaBhH7NhbDTUjr2TTYYrw/exec';
-const DATA_SHEET_URL='https://docs.google.com/spreadsheets/d/1DD5kdbvmfYvZ4V33Q2ZseVFr3TDF2sE6z5y8CTlnoDk/edit';
-const MEMBER_SHEET_URL='https://docs.google.com/spreadsheets/d/1AEs7VCHjYoYmu8jQw1k7g1PpwqmcKTlPbI3tm7bkf2s/edit';
-let raw={startups:[],alumni:[],members:[],partners:[],events:[]}; let data={startups:[],alumni:[],members:[],partners:[],events:[]}; let viewMode='list';
+const API_BASE='https://script.google.com/macros/s/AKfycby5BjSXDdBpEBFBwfGMnFAvcSCPganxrSSnRAfnmEGSPSY8Yupw2VKOfHl5NEoktaD2/exec';
+const DATA_SHEET_URL='https://docs.google.com/spreadsheets/d/1o8ptque1Vl24st1ZWa1zrngou6eXBNwD/edit';
+const MEMBER_SHEET_URL='https://docs.google.com/spreadsheets/d/1o8ptque1Vl24st1ZWa1zrngou6eXBNwD/edit';
+let raw={startups:[],alumni:[],members:[],partners:[],events:[],services:[]}; let data={startups:[],alumni:[],members:[],partners:[],events:[],services:[]}; let viewMode='list'; let currentExport={page:'overview',title:'Overview',rows:[]}; let selectedRecipients={startups:new Set(),alumni:new Set()};
 const MARKET_OPTIONS=['台灣','日本','歐美','東南亞','印度','不明'];
 const LEVEL_OPTIONS=['鑽石','黃金','白金','加速器'];
 const PARTNER_TYPES=['企業','投資人','政府單位','法人機構','學研機構','媒體','新創生態系','專業服務','其他'];
@@ -81,26 +532,220 @@ function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&l
 function splitList(v){return String(v||'').replace(/\r?\n/g,',').split(/[、,，;；/|]+/).map(x=>x.trim()).filter(Boolean)}
 function get(o,ks){for(const k of ks){if(o[k]!==undefined&&String(o[k]).trim())return String(o[k]).trim()}return ''}
 function parseDate(v){if(!v)return null; const s=String(v).replace(/\./g,'/').replace(/-/g,'/'); const d=new Date(s); return isNaN(d)?null:d}
+function normalizeCompanyName(v){return String(v||'').replace(/\s/g,'').replace(/股份有限公司|有限公司|公司/g,'')}
+function findMemberByName(name){
+ const key=normalizeCompanyName(name);
+ return (data.members||[]).find(m=>normalizeCompanyName(m.name)===key)||null;
+}
+function getContractInfo(row,type,name){
+ const member=findMemberByName(name);
+ const startText=get(row,['起'])||(member&&member.startText)||'';
+ const endText=get(row,['迄'])||(member&&member.endText)||'';
+ const startDate=parseDate(startText);
+ const endDate=parseDate(endText);
+ return {startText,endText,startDate,endDate};
+}
+function isServiceInContract(service,contract){
+ if(!contract||(!contract.startDate&&!contract.endDate))return true;
+ const t=serviceDateValue(service);
+ if(!t)return false;
+ if(contract.startDate&&t<contract.startDate.getTime())return false;
+ if(contract.endDate&&t>contract.endDate.getTime()+86399999)return false;
+ return true;
+}
+function filterServicesByContract(services,contract){
+ return (Array.isArray(services)?services:[]).filter(s=>isServiceInContract(s,contract));
+}
+function primaryEmail(item){
+ return get(item,['負責人連絡信箱','電子郵件','Email','email','信箱','聯絡信箱','負責人信箱']);
+}
+function selectedSet(type){
+ if(!selectedRecipients[type])selectedRecipients[type]=new Set();
+ return selectedRecipients[type];
+}
+function toggleRecipientSelection(type,name,checked){
+ const set=selectedSet(type);
+ if(checked)set.add(name); else set.delete(name);
+ const rows=(currentExport.page===type&&currentExport.rows&&currentExport.rows.length)?currentExport.rows:(data[type]||[]);
+ const view=document.getElementById('view-'+type);
+ if(view)renderStartupView(type,rows);
+}
+function selectAllCurrent(type){
+ const rows=(currentExport.page===type&&currentExport.rows&&currentExport.rows.length)?currentExport.rows:(data[type]||[]);
+ rows.forEach(s=>selectedSet(type).add(s.name));
+ renderStartupView(type,rows);
+}
+function clearSelectedRecipients(type){
+ selectedSet(type).clear();
+ const rows=(currentExport.page===type&&currentExport.rows&&currentExport.rows.length)?currentExport.rows:(data[type]||[]);
+ renderStartupView(type,rows);
+}
+function selectedRowsForType(type){
+ const names=[...selectedSet(type)];
+ if(!names.length)return [];
+ const pool=data[type]||[];
+ return names.map(n=>pool.find(s=>s.name===n)).filter(Boolean);
+}
+function selectedCountLabel(type){
+ const n=selectedRowsForType(type).length;
+ return n?`已勾選 ${n} 筆`:'尚未勾選';
+}
+function emailButtonHtml(item,type){
+ const email=primaryEmail(item);
+ const cls=email?'btn primary':'btn';
+ const title=email?'開啟 Gmail 寄信':'此新創尚未建立 Email';
+ return `<button class="${cls}" title="${esc(title)}" onclick='sendSingleEmail(${JSON.stringify(item.name)},${JSON.stringify(item._type||type)})'>寄信</button>`;
+}
+function openGmailCompose({to='',bcc=[],subject='IAPS 通知',body='您好，\n\n想與您分享 IAPS 相關資訊，敬請參考。\n\n謝謝。'}={}){
+ const bccList=Array.isArray(bcc)?bcc.join(','):String(bcc||'');
+ const url='https://mail.google.com/mail/?view=cm&fs=1'
+  +(to?'&to='+encodeURIComponent(to):'')
+  +(bccList?'&bcc='+encodeURIComponent(bccList):'')
+  +'&su='+encodeURIComponent(subject||'')
+  +'&body='+encodeURIComponent(body||'');
+ window.open(url,'_blank');
+}
+function sendSelectedEmails(type){
+ const names=[...selectedSet(type)];
+ if(!names.length){alert('請先勾選要寄送的對象。');return}
+ const pool=data[type]||[];
+ const selected=names.map(n=>pool.find(s=>s.name===n)).filter(Boolean);
+ const emails=[...new Set(selected.map(primaryEmail).filter(Boolean))];
+ const missing=selected.filter(s=>!primaryEmail(s)).map(s=>s.name);
+ if(!emails.length){alert('勾選的新創目前沒有可用 Email 欄位。');return}
+ if(missing.length){
+  const ok=confirm(`有 ${missing.length} 家新創沒有 Email，將略過：\n${missing.slice(0,8).join('\n')}${missing.length>8?'\n...':''}\n\n是否繼續開啟 Gmail？`);
+  if(!ok)return;
+ }
+ openGmailCompose({
+  bcc:emails,
+  subject:'IAPS 活動資訊',
+  body:'您好，\n\n想與您分享近期 IAPS 活動資訊，敬請參考。\n\n謝謝。'
+ });
+}
+function sendSingleEmail(name,type='startups'){
+ const item=(data[type]||[]).find(x=>x.name===name)||data.startups.find(x=>x.name===name)||data.alumni.find(x=>x.name===name);
+ if(!item){alert('找不到此新創資料。');return}
+ const email=primaryEmail(item);
+ if(!email){alert('此新創尚未建立 Email 欄位。');return}
+ openGmailCompose({
+  to:email,
+  subject:'IAPS 通知',
+  body:`您好，\n\n想與您分享 IAPS 相關資訊，敬請參考。\n\n謝謝。`
+ });
+}
+
+function extractYear(v){const m=String(v||'').match(/(20\d{2})/); return m?m[1]:''}
+function serviceEventYear(s){return extractYear(s.timestamp||s['時間戳記'])||extractYear(s.date)||extractYear(s['1. 發生時間'])||''}
+function serviceEventName(s){return get(s,['eventKey','activityName','2. 媒合會名稱','2. 展覽活動名稱','2. 論壇名稱','1. 授課主題'])}
+function isServiceEventRelated(s){const item=String(s.serviceItem||s['服務項目 ']||s['服務項目']||''); return !!(s.isActivityRelated||item.includes('活動')||item.includes('課程'))}
+function eventMatchKey(name,yr){return `${normalizeEventName(name)}::${String(yr||'')}`}
+function normalizeEventName(v){return String(v||'').replace(/\s/g,'').replace(/[，,。．.、:：;；｜|()（）【】\[\]「」『』\-–—_]/g,'').toLowerCase()}
+function serviceUniqueKey(s){return [s.company,s.date,s.timestamp,s.serviceItem,s.summary,s.eventKey||s.activityName].join('|')}
+function recalcEventServiceStats(ev){const services=Array.isArray(ev.services)?ev.services:[]; const benefits=services.filter(s=>s.hasImpact); return {...ev,services,serviceCount:services.length,impactCount:benefits.length,hasImpact:!!(ev.hasImpact||benefits.length),participatingStartupCount:new Set(services.map(s=>s.company).filter(Boolean)).size,participatingStartupBenefits:benefits}}
+function buildEventsWithServiceForms(events,services){
+ // 乾淨規則：
+ // 1) 2025 活動只顯示活動表本身，不顯示服務紀錄 / 成效追蹤。
+ // 2) 服務表單只用「時間戳記」判斷年份，且只建立 / 掛載 2026 的活動服務紀錄。
+ const out=events.map(ev=>{
+  const evYear=String(ev.year||'');
+  if(evYear!=='2026'){
+   return {...ev,services:[],serviceCount:0,impactCount:0,hasImpact:!!ev.successCase,participatingStartupCount:0,participatingStartupBenefits:[]};
+  }
+  return recalcEventServiceStats({...ev,services:Array.isArray(ev.services)?[...ev.services]:[]});
+ });
+ const index={};
+ out.forEach(ev=>{const k=eventMatchKey(ev.name,ev.year); if(ev.name&&ev.year&&!index[k])index[k]=ev});
+ (services||[])
+  .filter(s=>isServiceEventRelated(s)&&serviceEventYear(s)==='2026')
+  .forEach(s=>{
+   const name=serviceEventName(s); if(!name)return;
+   const yr='2026';
+   const k=eventMatchKey(name,yr);
+   let ev=index[k];
+   if(!ev){
+    ev={name,date:s.timestamp||s.date||'',host:'',cohost:'',place:'',desc:'',attendCount:'',startupsList:[],partnersList:[],links:'',result:'',successCase:'',status:'表單服務紀錄',year:yr,services:[],serviceOnly:true,participatingStartupBenefits:[]};
+    index[k]=ev; out.push(ev);
+   }
+   const seen=new Set((ev.services||[]).map(serviceUniqueKey));
+   if(!seen.has(serviceUniqueKey(s))) ev.services.push(s);
+  });
+ return out.map(ev=>String(ev.year||'')==='2026'?recalcEventServiceStats(ev):ev);
+}
+function heatLevel(count){if(count>=5)return 'high'; if(count>=2)return 'medium'; if(count===1)return 'low'; return 'none'}
+function heatDots(count){if(count>=5)return '● ● ●'; if(count>=2)return '● ● ○'; if(count===1)return '● ○ ○'; return '○ ○ ○'}
+function latestServiceDate(services){if(!Array.isArray(services)||!services.length)return ''; const sorted=[...services].sort((a,b)=>(Number(b.dateValue)||0)-(Number(a.dateValue)||0)); return sorted[0]?.date||''}
+function serviceIcon(type,item=''){const t=String(type||item||''); if(t.includes('pitch'))return '🎤'; if(t.includes('exhibition'))return '🏟️'; if(t.includes('panel'))return '🎙️'; if(t.includes('training'))return '📚'; if(t.includes('incubation'))return '🏢'; if(t.includes('impact'))return '✓'; if(t.includes('consulting'))return '🤝'; return '🧩'}
+function serviceDisplayType(s){const type=String(s.serviceType||''); const item=String(s.serviceItem||s['服務項目 ']||s['服務項目']||''); if(type==='consulting'||item.includes('輔導諮詢')||item.includes('Kick Off'))return '輔導諮詢'; if(type==='pitch'||item.includes('Pitch')||item.includes('媒合會'))return 'Pitch媒合'; if(type==='exhibition'||item.includes('展覽'))return '展覽'; if(type==='panel'||item.includes('論壇')||item.includes('Panel'))return '論壇Panel'; if(type==='promotion'||item.includes('宣傳')||item.includes('曝光'))return '宣傳曝光'; if(type==='training'||item.includes('課程')||item.includes('授課'))return '課程資源'; if(type==='incubation'||item.includes('進駐'))return '進駐服務'; if(type==='impact'||item.includes('促成實質成效'))return '促成實質成效'; return '其他服務'}
+function overviewServiceYear(s){return extractYear(s.timestamp||s['時間戳記'])||extractYear(s.date)||extractYear(s['1. 發生時間'])||''}
+function currentYearServices(){const y=String(new Date().getFullYear()); return (data.services||[]).filter(s=>overviewServiceYear(s)===y)}
+function serviceTypeDistributionHtml(){const services=currentYearServices(); const counts={}; services.forEach(s=>{const k=serviceDisplayType(s); counts[k]=(counts[k]||0)+1}); const order=['輔導諮詢','Pitch媒合','展覽','論壇Panel','宣傳曝光','課程資源','進駐服務','促成實質成效','其他服務']; const entries=order.filter(k=>counts[k]).map(k=>[k,counts[k]]); if(!entries.length)return '<div class="empty">今年尚無服務紀錄</div>'; const max=Math.max(...entries.map(x=>x[1]),1); return `<div class="overview-service-list">${entries.map(([k,v])=>`<div class="overview-service-row"><div class="overview-service-name">${esc(k)}</div><div class="bar-bg"><div class="bar-fill" style="width:${Math.max(6,v/max*100)}%"></div></div><div><b>${esc(v)}</b> 次</div></div>`).join('')}</div>`}
+function impactTrackingHtml(){const impacts=currentYearServices().filter(s=>s.hasImpact||s.impactType).sort((a,b)=>(Number(b.dateValue)||parseEventDate(b.date)?.getTime()||0)-(Number(a.dateValue)||parseEventDate(a.date)?.getTime()||0)); if(!impacts.length)return '<div class="empty">今年尚無已促成效益紀錄</div>'; return impacts.map(s=>{const matched=data.startups.find(x=>x.name===s.company)||data.alumni.find(x=>x.name===s.company); const company=matched?`<span class="overview-impact-company" onclick='openDetail(${JSON.stringify(matched.name)},${JSON.stringify(matched._type||'startups')})'>${esc(s.company)}</span>`:`<span class="overview-impact-company">${esc(s.company||'未命名新創')}</span>`; return `<div class="overview-impact-row"><div>${company}<div class="overview-impact-meta">${esc(s.summary||s.serviceItem||'')}</div></div><div><span class="overview-impact-type">${esc(s.impactType||'有效益')}</span></div><div class="overview-impact-meta">${esc(s.date||s.timestamp||'')}</div></div>`}).join('')}
+function serviceLabel(s){return s.serviceItem||s.serviceType||'服務紀錄'}
+function serviceBadges(s){
+ const count=Number(s.serviceCount||s.interactionCount||0);
+ const level=s.heatLevel||heatLevel(count);
+ const dots=s.heatDots||heatDots(count);
+ return `<div class="service-heat"><span class="heat-dots ${esc(level)}">${esc(dots)}</span></div><div class="tags">${count>0?`<span class="tag service">${count} 次服務</span>`:`<span class="tag zero">尚無服務紀錄</span>`}${s.hasImpact?`<span class="tag impact">✓ 有效益</span>`:''}</div>`;
+}
+function serviceMeta(s){return `<div class="service-meta">${s.lastServiceDate?`<span>最後服務：${esc(s.lastServiceDate)}</span>`:''}${s.impactCount?`<span>效益案例：${esc(s.impactCount)}</span>`:''}</div>`}
+function dateOnly(v){
+ const s=String(v||'').trim();
+ const m=s.match(/(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
+ if(m)return `${m[1]}/${m[2]}/${m[3]}`;
+ const m2=s.match(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
+ if(m2)return `${m2[3]}/${m2[1]}/${m2[2]}`;
+ return s.split(' ')[0];
+}
+
+function serviceTimelineHtml(services){
+ if(!Array.isArray(services)||!services.length)return '<div class="empty">尚無服務紀錄</div>';
+ return services.map(s=>`<div class="service-record ${s.hasImpact?'impact':''}"><div class="service-record-head"><span>${serviceIcon(s.serviceType,s.serviceItem)}</span><span>${esc(dateOnly(s.timestamp||s.date)||'—')}</span><span>｜${esc(serviceLabel(s))}</span><span>｜${esc(s.owner||'—')}</span>${s.hasImpact?`<span class="tag impact">✓ ${esc(s.impactType||'有效益')}</span>`:''}</div><div class="service-record-body">${esc(s.summary||s.activityName||'尚無摘要')}</div>${s.evidenceLink?`<div class="service-record-link"><a href="${esc(s.evidenceLink)}" target="_blank" rel="noopener">查看佐證資料</a></div>`:''}</div>`).join('');
+}
+function eventServicesHtml(ev){
+ if(String(ev.year||'')!=='2026')return '';
+ const services=Array.isArray(ev.services)?ev.services:[];
+ if(!services.length)return '';
+ return `<div class="event-service-box"><div class="event-service-title">服務紀錄 / 成效追蹤</div><div class="event-service-summary"><span class="tag service">參與新創：${esc(ev.participatingStartupCount||0)} 家</span><span class="tag service">已建立服務紀錄：${esc(ev.serviceCount||0)} 筆</span>${ev.impactCount?`<span class="tag impact">有效益案例：${esc(ev.impactCount)} 筆</span>`:''}</div>${services.map(s=>`<div class="event-service-item ${s.hasImpact?'impact':''}"><div class="event-service-company">${esc(s.company||'未命名新創')}</div><div class="event-service-desc">${serviceIcon(s.serviceType,s.serviceItem)} ${esc(serviceLabel(s))}｜${esc(dateOnly(s.timestamp||s.date)||'—')}｜${esc(s.owner||'—')}</div><div class="event-service-desc">${esc(s.summary||s.activityName||'')}</div>${s.hasImpact?`<div class="tags"><span class="tag impact">✓ ${esc(s.impactType||'有效益')}</span></div>`:''}</div>`).join('')}</div>`;
+}
 function year(v){const m=String(v||'').match(/\d{4}/); return m?m[0]:'—'}
 function markets(v){const t=String(v||'').toLowerCase(); const set=new Set(); if(/台灣|臺灣|taiwan|tw/.test(t))set.add('台灣'); if(/日本|japan|jp/.test(t))set.add('日本'); if(/歐美|美國|歐洲|usa|u\.s\.|america|europe|eu|英國|德國|法國|加拿大|澳洲/.test(t))set.add('歐美'); if(/東南亞|新加坡|馬來西亞|泰國|越南|印尼|菲律賓|singapore|malaysia|thailand|vietnam|indonesia|philippines|asean/.test(t))set.add('東南亞'); if(/印度|india/.test(t))set.add('印度'); if(!set.size)set.add('不明'); return [...set]}
-function industryTags(item){const industry=item['產業']||''; const text=[industry,item['公司業務說明']||'',item['公司簡介']||'',item['備註']||'',item['公司全稱']||''].join(' '); const tags=new Set(); INDUSTRY_RULES.forEach(r=>{if(r.patterns.some(p=>p.test(industry)))tags.add(r.tag)}); if(!tags.size){INDUSTRY_RULES.forEach(r=>{if(r.patterns.some(p=>p.test(text)))tags.add(r.tag)})} if(!tags.size)tags.add('Information Technology'); return [...tags]}
+function industryTags(item){const industry=String(item['產業']||'').trim(); if(!industry)return []; const tags=new Set(); INDUSTRY_RULES.forEach(r=>{if(r.patterns.some(p=>p.test(industry)))tags.add(r.tag)}); return [...tags]}
 function normStartup(r,type){
  const name=get(r,['公司全稱','公司名稱','公司','團隊名稱']);
  const lev=get(r,['等級','會員等級']);
  const prem=/true|yes|是|1/i.test(get(r,['Premium','premium','加值']));
  const product=get(r,['產品與服務','產品服務','產品/服務','解決方案']);
  const scenario=get(r,['主要應用場景','應用場景','應用領域']);
- const target=get(r,['目標客戶','Target Customer','TA','目標市場']);
+ const target=get(r,['TA Market','目標市場','target market','目標客戶','Target Customer','TA']);
+ const targetTags=splitList(target);
+ const allServices=Array.isArray(r.services)?r.services:[];
+ const contract=getContractInfo(r,type,name);
+ const services=filterServicesByContract(allServices,contract);
+ const serviceCount=services.length;
+ const impactCount=services.filter(s=>s.hasImpact||s.impactType||String(s.serviceType||'')==='impact').length;
  return {...r,_type:type,name,
   desc:get(r,['公司業務說明','公司簡介','公司介紹','介紹','備註']),
-  product,scenario,target,
+  product,scenario,target,targetTags,
   level:lev,premium:prem,
+  manager:get(r,['主責經理','負責人','聯絡窗口']),
   founder:get(r,['負責人','主責經理','聯絡窗口']),
   title:get(r,['負責人職稱','職稱']),
   startYear:year(get(r,['公司成立時間','成立年份','成立時間'])),
-  graduateYear:year(get(r,['畢業年分','畢業年份','出場年份','結業年份'])),
-  marketTags:markets(get(r,['TA Market','目標市場','海外發展狀態','海外發展','target market'])),
-  industryTags:industryTags(r)
+  graduateYear:year(get(r,['迄'])),
+  contractStartText:contract.startText,
+  contractEndText:contract.endText,
+  allServices,
+  marketTags:markets(target),
+  industryTags:industryTags(r),
+  services,
+  serviceCount,
+  interactionCount:serviceCount,
+  impactCount,
+  hasImpact:!!(r.hasImpact||impactCount>0),
+  lastServiceDate:r.lastServiceDate||latestServiceDate(services),
+  heatLevel:r.heatLevel||heatLevel(serviceCount),
+  heatDots:r.heatDots||heatDots(serviceCount)
  }}
 function normPartner(r){
  let category=get(r,['partnerCategory','分類別','類別','類型','分類'])||'其他';
@@ -122,16 +767,72 @@ function normPartner(r){
   status:get(r,['合作狀態','狀態','Status','status'])||'待分類'
  }}
 function normMember(r){return {...r,name:get(r,['公司全稱','公司名稱']),level:get(r,['等級']),status:get(r,['狀態']),startDate:parseDate(get(r,['起'])),endDate:parseDate(get(r,['迄'])),startText:get(r,['起']),endText:get(r,['迄'])}}
-function normEvent(r){return {...r,
+function splitNames(v){return String(v||'').split(/\n|、|,|，/).map(x=>x.trim()).filter(Boolean)}
+function normEvent(r){
+ const startupsList=splitNames(get(r,['參與新創企業名稱','參與新創','參與團隊']));
+ const partnersList=splitNames(get(r,['參與企業','協辦單位','參與單位','合作企業']));
+ const services=Array.isArray(r.services)?r.services:[];
+ const participatingStartupBenefits=Array.isArray(r.participatingStartupBenefits)?r.participatingStartupBenefits:[];
+ return {...r,
  name:get(r,['活動名稱','名稱','活動']),
- date:get(r,['辦理時間','日期','活動日期','時間']),
+ date:get(r,['日期','辦理時間','活動日期','時間']),
  host:get(r,['主辦單位','主辦']),
- place:get(r,['辦理地點','地點','活動地點']),
- startups:get(r,['參與新創','參與團隊']),
- partners:get(r,['參與企業','參與單位','合作企業']),
+ cohost:get(r,['協辦單位','協辦']),
+ place:get(r,['活動地點','辦理地點','地點']),
+ desc:get(r,['內容','活動內容','說明']),
+ attendCount:get(r,['實際參與人次','參與人次','人次']),
+ startupsList,
+ partnersList,
+ links:get(r,['相關連結(議程/海報/照片)','相關連結','連結']),
  result:get(r,['活動成果','成果','成功案例','備註']),
- photos:get(r,['活動照片','照片','圖片'])
+ successCase:get(r,['媒合成功案例','成功案例']),
+ status:get(r,['執行狀態','狀態']),
+ year:get(r,['活動年度']),
+ services,
+ serviceCount:Number(r.serviceCount||services.length||0),
+ impactCount:Number(r.impactCount||participatingStartupBenefits.length||0),
+ participatingStartupCount:Number(r.participatingStartupCount||new Set(services.map(s=>s.company).filter(Boolean)).size||0),
+ hasImpact:!!(r.hasImpact||r.impactCount>0||participatingStartupBenefits.length>0),
+ participatingStartupBenefits
 }}
+
+function freqLabel(level){return level==='high'?'高':level==='medium'?'中':level==='low'?'低':'無'}
+function activePageId(){if(document.getElementById('detail')?.classList.contains('active'))return 'detail'; return (document.querySelector('.page.active')?.id||'page-overview').replace('page-','')}
+function safeFilePart(value){return String(value||'IAPS').replace(/[\\/:*?"<>|]+/g,'_').slice(0,80)}
+function todayText(){const d=new Date(); return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`}
+function exportTitle(page){return ({overview:'Overview',startups:'新創資料庫',alumni:'歷史新創',partners:'合作對象',events:'活動紀錄',detail:currentExport.title||'詳細資料'})[page]||'匯出資料'}
+function getDefaultExportRows(page){if(page==='startups')return data.startups||[]; if(page==='alumni')return data.alumni||[]; if(page==='partners')return data.partners||[]; if(page==='events')return data.events||[]; if(page==='overview')return currentYearServices(); if(page==='detail')return currentExport.rows||[]; return []}
+function formatExportRow(page,row){
+ if(page==='startups'||page==='alumni'||page==='detail'){
+  if(page==='detail' && row && Array.isArray(row.services) && row.services.length){
+   return {'公司名稱':row.name,'產業':(row.industryTags||[]).join('、'),'原始產業':row['產業']||'','會員等級':row.level||'','互動頻率':freqLabel(row.heatLevel||heatLevel(Number(row.serviceCount||0))),'服務次數':row.serviceCount||0,'有效益':row.hasImpact?'是':'否','最後服務日期':row.lastServiceDate||'','成立年份':row.startYear||'','畢業年份':row.graduateYear&&row.graduateYear!=='—'?row.graduateYear:'','TA Market':row.target||get(row,['TA Market','目標市場']),'負責人':row.founder||'','主責經理':row.manager||row['主責經理']||'','公司簡介':row.desc||''}
+  }
+  return {'公司名稱':row.name||'','產業':(row.industryTags||[]).join('、'),'原始產業':row['產業']||'','會員等級':row.level||'','Premium':row.premium?'是':'否','互動頻率':freqLabel(row.heatLevel||heatLevel(Number(row.serviceCount||row.interactionCount||0))),'服務次數':row.serviceCount||row.interactionCount||0,'有效益':row.hasImpact?'是':'否','最後服務日期':row.lastServiceDate||'','成立年份':row.startYear||'','畢業年份':row.graduateYear&&row.graduateYear!=='—'?row.graduateYear:'','TA Market':row.target||get(row,['TA Market','目標市場']),'負責人':row.founder||'','主責經理':row.manager||row['主責經理']||'','產品與服務':row.product||'','主要應用場景':row.scenario||'','公司簡介':row.desc||''}
+ }
+ if(page==='partners')return {'合作對象':row.name||'','類型':row.type||'','狀態':row.status||'','聯絡窗口':row.contact||'','職稱':row.title||'','Email/電話':row.email||row.phone||'','來源':row.source||'','備註':row.note||''}
+ if(page==='events')return {'活動名稱':row.name||'','年份':row.year||'','日期':row.date||'','地點':row.place||'','主辦單位':row.host||'','協辦單位':row.cohost||'','服務紀錄數':row.serviceCount||0,'參與新創數':row.participatingStartupCount||0,'效益數':row.impactCount||0,'參與新創':(row.startupsList||[]).join('、'),'參與企業':(row.partnersList||[]).join('、'),'活動成果':row.result||'','媒合成功案例':row.successCase||''}
+ if(page==='overview')return {'年份':overviewServiceYear(row)||'','公司名稱':row.company||'','服務類型':serviceDisplayType(row),'服務項目':row.serviceItem||'','日期':row.date||row.timestamp||'','提供服務人員':row.owner||'','摘要':row.summary||row.activityName||'','有效益':row.hasImpact||row.impactType?'是':'否','效益類型':row.impactType||'','佐證連結':row.evidenceLink||''}
+ return row
+}
+function exportCurrentView(){
+ if(typeof XLSX==='undefined'){alert('匯出套件尚未載入，請確認網路連線後重新整理頁面。');return}
+ const page=activePageId();
+ let rows=(currentExport.page===page&&currentExport.rows&&currentExport.rows.length)?currentExport.rows:getDefaultExportRows(page);
+ let title=exportTitle(page);
+ if(page==='startups'||page==='alumni'){
+  const selectedRows=selectedRowsForType(page);
+  if(selectedRows.length){
+   rows=selectedRows;
+   title=title+'（勾選）';
+  }
+ }
+ if(!rows||!rows.length){alert('目前沒有可匯出的資料。');return}
+ const formatted=rows.map(r=>formatExportRow(page,r));
+ const wb=XLSX.utils.book_new();
+ const ws=XLSX.utils.json_to_sheet(formatted);
+ XLSX.utils.book_append_sheet(wb,ws,safeFilePart(title).slice(0,31));
+ XLSX.writeFile(wb,`IAPS_${safeFilePart(title)}_${todayText()}.xlsx`);
+}
 async function fetchType(type){
  const res=await fetch(`${API_BASE}?type=${type}`);
  if(!res.ok)throw new Error(`${type}: HTTP ${res.status}`);
@@ -143,23 +844,65 @@ async function fetchType(type){
  if(Array.isArray(json.data))return json.data;
  throw new Error(`${type}: ${json.message||'API 回傳格式不符'}`);
 }
-async function loadAll(){try{document.body.style.cursor='wait'; const types=['startups','alumni','members','partners','events']; const results=await Promise.all(types.map(t=>fetchType(t).catch(e=>{console.warn(e.message);return []}))); types.forEach((t,i)=>raw[t]=results[i]); data.startups=raw.startups.map(x=>normStartup(x,'startups')); data.alumni=raw.alumni.map(x=>normStartup(x,'alumni')); data.members=raw.members.map(normMember); data.partners=raw.partners.map(normPartner); data.events=raw.events.map(normEvent); renderAll();}catch(e){alert('連線失敗：'+e.message)}finally{document.body.style.cursor='default'}}
+async function loadAll(){try{document.body.style.cursor='wait'; const types=['startups','alumni','members','partners','events','services']; const results=await Promise.all(types.map(t=>fetchType(t).catch(e=>{console.warn(e.message);return []}))); types.forEach((t,i)=>raw[t]=results[i]); data.services=raw.services||[]; data.members=raw.members.map(normMember); data.startups=raw.startups.map(x=>normStartup(x,'startups')); data.alumni=raw.alumni.map(x=>normStartup(x,'alumni')); data.partners=raw.partners.map(normPartner); data.events=buildEventsWithServiceForms(raw.events.map(normEvent),data.services); renderAll();}catch(e){alert('連線失敗：'+e.message)}finally{document.body.style.cursor='default'}}
 function renderAll(){renderOverview();renderStartups('startups');renderStartups('alumni');renderPartners();renderEvents();renderMatch();}
 function showPage(id){document.querySelectorAll('.page,.detail').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nav').forEach(b=>b.classList.remove('active'));[...document.querySelectorAll('.nav')].find(b=>b.textContent.includes(id==='overview'?'總覽':id==='startups'?'新創資料庫':id==='alumni'?'歷史新創':id==='partners'?'合作對象':id==='events'?'活動':'AI'))?.classList.add('active')}
-function renderOverview(){const el=document.getElementById('page-overview'); const active=data.members.length?data.members.filter(m=>m.status==='有效'):data.startups; const now=new Date(); const in90=new Date(); in90.setDate(now.getDate()-90); const in30=new Date(); in30.setDate(now.getDate()+30); const recent=data.members.filter(m=>m.startDate&&m.startDate>=in90).slice(0,8); const expiring=active.filter(m=>m.endDate&&m.endDate>=now&&m.endDate<=in30).slice(0,8); const exits=data.members.filter(m=>m.status&&m.status!=='有效'&&m.endDate).sort((a,b)=>b.endDate-a.endDate).slice(0,8); el.innerHTML=`<div class="page-head"><div><h1 class="page-title">總覽 Overview</h1><div class="subtitle">更新於 ${new Date().toLocaleDateString()}</div></div></div><div class="grid4"><div class="card kpi p16"><small>有效會員</small><div class="num">${active.length}</div></div><div class="card kpi cyan p16"><small>歷史會員</small><div class="num">${data.alumni.length}</div></div><div class="card kpi orange p16"><small>合作對象</small><div class="num">${data.partners.length}</div></div><div class="card kpi green p16"><small>已建檔活動</small><div class="num">${data.events.length}</div></div></div><div class="overview-note">活動數為目前已建檔活動，不代表完整年度活動總數。</div><div class="grid3 section"><div class="card p16"><h3>🆕 近三個月新增會員</h3>${miniRows(recent,'startups')}</div><div class="card p16"><h3>⏳ 即將到期會員</h3>${miniRows(expiring,'startups','endText')}</div><div class="card p16"><h3>🚪 近期出場會員</h3>${miniRows(exits,'startups','endText')}</div></div><div class="grid2 section"><div class="card p16"><h3>▣ 產業 Treemap</h3><div class="treemap">${treemapHtml()}</div></div><div class="card p16"><h3>⭐ 會員等級分布</h3>${bars(levelCounts(data.members),'level')}</div></div><div class="card p16 section"><h3>📅 成立年份趨勢</h3>${bars(yearCounts(data.startups),'year')}</div>`}
+
+function serviceDateValue(record){
+ const direct=Number(record&&record.dateValue)||0;
+ if(direct)return direct;
+ const d=parseDate((record&&record.date)||(record&&record.timestamp)||(record&&record['時間戳記'])||'');
+ return d?d.getTime():0;
+}
+function recentServicedCompanies(days=90){
+ const now=new Date();
+ const since=new Date();
+ since.setDate(now.getDate()-days);
+ const pool=[...data.startups,...data.alumni];
+ return pool.map(company=>{
+  const services=(company.services||[])
+   .map(service=>({...service,_time:serviceDateValue(service)}))
+   .filter(service=>service._time>=since.getTime()&&service._time<=now.getTime())
+   .sort((a,b)=>b._time-a._time);
+  if(!services.length)return null;
+  return {...company,recentServiceCount:services.length,recentServiceDate:services[0].date||services[0].timestamp||''};
+ }).filter(Boolean).sort((a,b)=>{
+  const at=(a.services||[]).reduce((max,svc)=>Math.max(max,serviceDateValue(svc)),0);
+  const bt=(b.services||[]).reduce((max,svc)=>Math.max(max,serviceDateValue(svc)),0);
+  return bt-at;
+ }).slice(0,8);
+}
+function renderOverview(){const el=document.getElementById('page-overview'); const active=data.members.length?data.members.filter(m=>m.status==='有效'):data.startups; const now=new Date(); const in90=new Date(); in90.setDate(now.getDate()-90); const due90=new Date(); due90.setDate(now.getDate()+90); const recent=data.members.filter(m=>m.startDate&&m.startDate>=in90).slice(0,8); const expiring=active.filter(m=>m.endDate&&m.endDate>=now&&m.endDate<=due90).sort((a,b)=>a.endDate-b.endDate).slice(0,8); const recentServices=recentServicedCompanies(90); const y=new Date().getFullYear(); currentExport={page:'overview',title:'Overview',rows:currentYearServices()}; el.innerHTML=`<div class="page-head"><div><h1 class="page-title">總覽 Overview</h1><div class="subtitle">更新於 ${new Date().toLocaleDateString()}</div></div></div><div class="grid4"><div class="card kpi p16"><small>有效會員</small><div class="num">${active.length}</div></div><div class="card kpi cyan p16"><small>歷史會員</small><div class="num">${data.alumni.length}</div></div><div class="card kpi orange p16"><small>合作對象</small><div class="num">${data.partners.length}</div></div><div class="card kpi green p16"><small>已建檔活動</small><div class="num">${data.events.length}</div></div></div><div class="overview-note">活動數為目前已建檔活動，不代表完整年度活動總數。</div><div class="grid2 section"><div class="card p16"><h3>服務類型分布（${y} 年累計）</h3>${serviceTypeDistributionHtml()}</div><div class="card p16"><h3>效益追蹤</h3>${impactTrackingHtml()}</div></div><div class="grid3 section"><div class="card p16"><h3>近三個月新增會員</h3>${miniRows(recent,'startups')}</div><div class="card p16"><h3>即將到期會員（迄日前 3 個月）</h3>${miniRows(expiring,'startups','endText')}</div><div class="card p16"><h3>近三個月有服務紀錄會員</h3>${miniRows(recentServices,'startups','recentServiceDate')}</div></div><div class="grid2 section"><div class="card p16"><h3>產業 Treemap</h3><div class="treemap">${treemapHtml()}</div></div><div class="card p16"><h3>會員等級分布</h3>${bars(levelCounts(data.members),'level')}</div></div><div class="card p16 section"><h3>成立年份趨勢</h3>${yearBars(yearCounts(data.startups))}</div>`}
 function miniRows(arr,type,dateField='startText'){return arr.length?arr.map(x=>`<div class="list-row" onclick='openByName(${JSON.stringify(x.name)})'><b>${esc(x.name)}</b><span class="date">${esc(x[dateField]||'')}</span></div>`).join(''):'<div class="empty">目前無資料</div>'}
 function levelCounts(arr){const o={}; arr.forEach(m=>{const k=m.level||'未分類'; o[k]=(o[k]||0)+1}); return o}
 function yearCounts(arr){const o={}; arr.forEach(m=>{const k=m.startYear; if(k&&k!=='—')o[k]=(o[k]||0)+1}); return o}
 function tagCounts(){const o={}; data.startups.forEach(s=>s.industryTags.forEach(t=>o[t]=(o[t]||0)+1)); return o}
 function bars(obj,kind){const entries=Object.entries(obj).sort((a,b)=>b[1]-a[1]); const total=entries.reduce((s,x)=>s+x[1],0)||1; return entries.map(([k,v])=>`<div class="bar-row"><div>${esc(k)}</div><div class="bar-bg"><div class="bar-fill" style="width:${v/total*100}%"></div></div><div>${Math.round(v/total*100)}%</div></div>`).join('')||'<div class="empty">目前無資料</div>'}
-function treemapHtml(){const entries=Object.entries(tagCounts()).sort((a,b)=>b[1]-a[1]); const total=entries.reduce((s,x)=>s+x[1],0)||1; const colors=['#2563eb','#0891b2','#059669','#d97706','#7c3aed','#0f766e','#475569','#64748b']; return entries.map(([k,v],i)=>`<div class="tile" onclick='filterByTag(${JSON.stringify(k)})' style="flex-grow:${Math.max(1,v)};background:${colors[i%colors.length]}">${esc(k)}<br>${Math.round(v/total*100)}%</div>`).join('')}
-function renderFilters(type){const allTags=[...new Set(data[type].flatMap(s=>s.industryTags))].sort();return `<div class="filters"><div class="field"><label>搜尋</label><input id="q-${type}" placeholder="關鍵字..." oninput="applyFilters('${type}')"></div><div class="field multi" id="multi-ind-${type}"><label>產業</label><button class="multi-btn" onclick="toggleMulti('multi-ind-${type}')">全部產業 ▾</button><div class="multi-menu">${allTags.map(t=>`<label><input type="checkbox" value="${esc(t)}" onchange="applyFilters('${type}')">${esc(t)}</label>`).join('')}</div></div><div class="field"><label>會員等級</label><select id="level-${type}" onchange="applyFilters('${type}')"><option value="">全部</option>${LEVEL_OPTIONS.map(x=>`<option>${x}</option>`).join('')}</select></div><div class="field multi" id="multi-market-${type}"><label>目標市場</label><button class="multi-btn" onclick="toggleMulti('multi-market-${type}')">全部市場 ▾</button><div class="multi-menu">${MARKET_OPTIONS.map(t=>`<label><input type="checkbox" value="${esc(t)}" onchange="applyFilters('${type}')">${esc(t)}</label>`).join('')}</div></div>${type==='alumni'?`<div class="field"><label>畢業年份</label><select id="gradyear-${type}" onchange="applyFilters('${type}')"><option value="">全部</option>${[...new Set(data[type].map(s=>s.graduateYear).filter(y=>y&&y!=='—'))].sort().reverse().map(y=>`<option>${y}</option>`).join('')}</select></div>`:`<div class="field"><label>Premium</label><select id="premium-${type}" onchange="applyFilters('${type}')"><option value="">全部</option><option value="true">Premium</option><option value="false">非 Premium</option></select></div>`}<button class="btn" onclick="clearFilters('${type}')">清除篩選</button><div class="toggle"><button class="btn" onclick="viewMode='list';applyFilters('${type}')">☰ 列表</button><button class="btn" onclick="viewMode='card';applyFilters('${type}')">▦ 卡片</button></div></div>`}
+function yearBars(obj){const entries=Object.entries(obj).sort((a,b)=>a[0].localeCompare(b[0])); if(!entries.length)return '<div class="empty">目前無資料</div>'; const max=Math.max(...entries.map(x=>x[1]),1); return `<div class="yr-chart">${entries.map(([y,v])=>`<div class="yr-col"><div class="yr-num">${v}</div><div class="yr-bar" style="height:${Math.round(v/max*120)}px"></div><div class="yr-lbl">${esc(y)}</div></div>`).join('')}</div>`}
+function treemapHtml(){const entries=Object.entries(tagCounts()).sort((a,b)=>b[1]-a[1]); const total=entries.reduce((s,x)=>s+x[1],0)||1; const colors=['#2563eb','#0891b2','#059669','#d97706','#7c3aed','#0f766e','#475569','#64748b']; return entries.map(([k,v],i)=>`<div class="tile" onclick='filterByTag(${JSON.stringify(k)})' style="flex-grow:${Math.max(1,v)};background:${colors[i%colors.length]}">${esc(k)}<br>${v} (${Math.round(v/total*100)}%)</div>`).join('')}
+function renderFilters(type){
+ const allTags=[...new Set(data[type].flatMap(s=>s.industryTags))].filter(Boolean).sort();
+ const filterHtml=`<div class="filters">
+  <div class="field"><label>搜尋</label><input id="q-${type}" placeholder="關鍵字..." oninput="applyFilters('${type}')"></div>
+  <div class="field multi" id="multi-ind-${type}"><label>產業</label><button class="multi-btn" onclick="toggleMulti('multi-ind-${type}')">全部產業 ▾</button><div class="multi-menu">${allTags.length?allTags.map(t=>`<label><input type="checkbox" value="${esc(t)}" onchange="applyFilters('${type}')">${esc(t)}</label>`).join(''):'<div class="empty" style="padding:12px">目前無產業標籤</div>'}</div></div>
+  <div class="field"><label>會員等級</label><select id="level-${type}" onchange="applyFilters('${type}')"><option value="">全部</option>${LEVEL_OPTIONS.map(x=>`<option>${x}</option>`).join('')}</select></div>
+  <div class="field"><label>互動頻率</label><select id="freq-${type}" onchange="applyFilters('${type}')"><option value="">全部</option><option value="none">無</option><option value="low">低</option><option value="medium">中</option><option value="high">高</option></select></div>
+  <div class="field multi" id="multi-market-${type}"><label>目標市場</label><button class="multi-btn" onclick="toggleMulti('multi-market-${type}')">全部市場 ▾</button><div class="multi-menu">${MARKET_OPTIONS.map(t=>`<label><input type="checkbox" value="${esc(t)}" onchange="applyFilters('${type}')">${esc(t)}</label>`).join('')}</div></div>
+  ${type==='alumni'?`<div class="field"><label>畢業年份</label><select id="gradyear-${type}" onchange="applyFilters('${type}')"><option value="">全部</option>${[...new Set(data[type].map(s=>s.graduateYear).filter(y=>y&&y!=='—'))].sort().reverse().map(y=>`<option>${y}</option>`).join('')}</select></div>`:`<div class="field"><label>Premium</label><select id="premium-${type}" onchange="applyFilters('${type}')"><option value="">全部</option><option value="true">Premium</option><option value="false">非 Premium</option></select></div>`}
+  <button class="btn" onclick="clearFilters('${type}')">清除篩選</button>
+ </div>`;
+ const viewHtml=`<div class="view-toolbar"><button class="btn" onclick="viewMode='list';applyFilters('${type}')">☰ 列表</button><button class="btn" onclick="viewMode='card';applyFilters('${type}')">▦ 卡片</button></div>`;
+ const bulkHtml=`<div class="bulk-actions"><button class="btn" onclick="selectAllCurrent('${type}')">全選</button><button class="btn primary" onclick="sendSelectedEmails('${type}')">寄推播信</button><button class="btn" onclick="clearSelectedRecipients('${type}')">清除勾選</button></div>`;
+ return `${viewHtml}${filterHtml}${bulkHtml}`;
+}
 function renderStartups(type){const el=document.getElementById('page-'+type); el.innerHTML=`<div class="page-head"><div><h1 class="page-title">${type==='startups'?'新創資料庫':'歷史新創'}</h1><div class="subtitle">共 ${data[type].length} 筆資料</div></div></div>${renderFilters(type)}<div id="view-${type}"></div>`; applyFilters(type)}
 function checked(id){return [...document.querySelectorAll(`#${id} input:checked`)].map(x=>x.value)}
-function applyFilters(type){let arr=[...data[type]]; const q=(document.getElementById('q-'+type)?.value||'').toLowerCase(); const tags=checked('multi-ind-'+type); const marketsSel=checked('multi-market-'+type); const lev=document.getElementById('level-'+type)?.value||''; const prem=document.getElementById('premium-'+type)?.value||''; const gy=document.getElementById('gradyear-'+type)?.value||''; if(q)arr=arr.filter(s=>[s.name,s.desc,s.product,s.scenario,s.target,s.founder,s['產業']].join(' ').toLowerCase().includes(q)); if(tags.length)arr=arr.filter(s=>tags.some(t=>s.industryTags.includes(t))); if(marketsSel.length)arr=arr.filter(s=>marketsSel.some(m=>s.marketTags.includes(m))); if(lev)arr=arr.filter(s=>s.level===lev); if(prem)arr=arr.filter(s=>String(s.premium)===prem); if(gy)arr=arr.filter(s=>s.graduateYear===gy); renderStartupView(type,arr)}
-function clearFilters(type){document.getElementById('q-'+type).value=''; document.getElementById('level-'+type).value=''; if(document.getElementById('premium-'+type))document.getElementById('premium-'+type).value=''; if(document.getElementById('gradyear-'+type))document.getElementById('gradyear-'+type).value=''; document.querySelectorAll(`#multi-ind-${type} input,#multi-market-${type} input`).forEach(x=>x.checked=false); applyFilters(type)}
-function tagHtml(s){return `<div class="tags">${s.premium?'<span class="tag premium">Premium</span>':''}${s.level?`<span class="tag level">${esc(s.level)}</span>`:''}</div><div class="tags">${s.industryTags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="tags">${s.marketTags.map(t=>`<span class="tag market">${esc(t)}</span>`).join('')}</div>`}
-function renderStartupView(type,arr){const el=document.getElementById('view-'+type); if(viewMode==='card'){el.innerHTML=`<div class="cards">${arr.map(s=>`<div class="card startup-card" onclick='openDetail(${JSON.stringify(s.name)},"${type}")'><div class="card-title">${esc(s.name)}</div><div class="desc">${esc(s.desc||'暫無簡介描述。')}</div>${tagHtml(s)}<div class="meta"><span>👤 ${esc(s.founder||'—')}</span><span>📅 ${esc(s.startYear)}</span><span class="arrow">→</span></div></div>`).join('')}</div>`}else{el.innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th>公司名稱</th><th>產業標籤</th><th>會員等級</th><th>成立年份</th><th>目標市場</th><th>負責人</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr onclick='openDetail(${JSON.stringify(s.name)},"${type}")'><td><b>${esc(s.name)}</b></td><td><div class="tags">${s.industryTags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div></td><td><div class="tags">${s.premium?'<span class="tag premium">Premium</span>':''}${s.level?`<span class="tag level">${esc(s.level)}</span>`:''}</div></td><td>${esc(s.startYear)}</td><td><div class="tags">${s.marketTags.map(t=>`<span class="tag market">${esc(t)}</span>`).join('')}</div></td><td>${esc(s.founder||'—')}</td><td class="arrow">→</td></tr>`).join('')}</tbody></table></div>`}}
+function applyFilters(type){let arr=[...data[type]]; const q=(document.getElementById('q-'+type)?.value||'').toLowerCase(); const tags=checked('multi-ind-'+type); const marketsSel=checked('multi-market-'+type); const lev=document.getElementById('level-'+type)?.value||''; const freq=document.getElementById('freq-'+type)?.value||''; const prem=document.getElementById('premium-'+type)?.value||''; const gy=document.getElementById('gradyear-'+type)?.value||''; if(q)arr=arr.filter(s=>[s.name,s.desc,s.product,s.scenario,s.target,s.founder,s.manager,s['產業']].join(' ').toLowerCase().includes(q)); if(tags.length)arr=arr.filter(s=>tags.some(t=>s.industryTags.includes(t))); if(marketsSel.length)arr=arr.filter(s=>marketsSel.some(m=>s.marketTags.includes(m))); if(lev)arr=arr.filter(s=>s.level===lev); if(freq)arr=arr.filter(s=>(s.heatLevel||heatLevel(Number(s.serviceCount||s.interactionCount||0)))===freq); if(prem)arr=arr.filter(s=>String(s.premium)===prem); if(gy)arr=arr.filter(s=>s.graduateYear===gy); currentExport={page:type,title:type==='startups'?'新創資料庫':'歷史新創',rows:arr}; renderStartupView(type,arr)}
+function clearFilters(type){document.getElementById('q-'+type).value=''; document.getElementById('level-'+type).value=''; if(document.getElementById('freq-'+type))document.getElementById('freq-'+type).value=''; if(document.getElementById('premium-'+type))document.getElementById('premium-'+type).value=''; if(document.getElementById('gradyear-'+type))document.getElementById('gradyear-'+type).value=''; document.querySelectorAll(`#multi-ind-${type} input,#multi-market-${type} input`).forEach(x=>x.checked=false); applyFilters(type)}
+function tagHtml(s){const topTags=`${s.premium?'<span class="tag premium">Premium</span>':''}${s.level?`<span class="tag level">${esc(s.level)}</span>`:''}`; const industryTags=(s.industryTags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join(''); return `${topTags?`<div class="tags">${topTags}</div>`:''}${industryTags?`<div class="tags">${industryTags}</div>`:''}`}
+function contractMeta(s){return (s.contractStartText||s.contractEndText)?`<div class="service-meta"><span>合約區間：${esc(s.contractStartText||'—')} ~ ${esc(s.contractEndText||'—')}</span></div>`:''}
+function recipientCheckbox(type,s){const checked=selectedSet(type).has(s.name)?'checked':''; return `<input type="checkbox" ${checked} onclick="event.stopPropagation()" onchange='toggleRecipientSelection(${JSON.stringify(type)},${JSON.stringify(s.name)},this.checked)'>`}
+function renderStartupView(type,arr){const el=document.getElementById('view-'+type); if(viewMode==='card'){el.innerHTML=`<div class="cards">${arr.map(s=>`<div class="card startup-card" onclick='openDetail(${JSON.stringify(s.name)},"${type}")'><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div class="card-title">${esc(s.name)}</div>${recipientCheckbox(type,s)}</div>${serviceBadges(s)}<div class="desc">${esc(s.desc||'暫無簡介描述。')}</div>${tagHtml(s)}${serviceMeta(s)}${contractMeta(s)}<div class="meta"><span>${esc(s.founder||'—')}</span><span>${esc(s.startYear)}</span><span class="arrow">→</span></div></div>`).join('')}</div>`}else{el.innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th style="width:44px">寄信</th><th>公司名稱</th><th>互動頻率</th><th>產業標籤</th><th>會員等級</th><th>成立年份</th><th>負責人</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr onclick='openDetail(${JSON.stringify(s.name)},"${type}")'><td onclick="event.stopPropagation()">${recipientCheckbox(type,s)}</td><td><b>${esc(s.name)}</b>${serviceMeta(s)}${contractMeta(s)}</td><td>${serviceBadges(s)}</td><td><div class="tags">${(s.industryTags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div></td><td><div class="tags">${s.premium?'<span class="tag premium">Premium</span>':''}${s.level?`<span class="tag level">${esc(s.level)}</span>`:''}</div></td><td>${esc(s.startYear)}</td><td>${esc(s.founder||'—')}</td><td class="arrow">→</td></tr>`).join('')}</tbody></table></div>`}}
 function renderPartners(){
  const el=document.getElementById('page-partners');
  const counts={};
@@ -189,16 +932,138 @@ function applyPartnerFilters(){
  if(q)arr=arr.filter(p=>[p.name,p.type,p.contact,p.email,p.source,p.note,p.reason].join(' ').toLowerCase().includes(q));
  if(t)arr=arr.filter(p=>p.type===t);
  if(st)arr=arr.filter(p=>p.status===st);
+ currentExport={page:'partners',title:'合作對象',rows:arr};
  const v=document.getElementById('partners-view');
  if(!arr.length){v.innerHTML='<div class="card empty">目前沒有符合條件的合作對象。</div>';return;}
- v.innerHTML=`<div class="cards">${arr.map(p=>`<div class="card partner-card"><div class="name">${esc(p.name)}</div><div class="tags"><span class="tag">${esc(p.type||'其他')}</span><span class="tag market">${esc(p.status||'待分類')}</span></div><div class="muted">${esc(p.note||p.source||'')}</div><div class="meta"><span>👤 ${esc(p.contact||'—')}</span><span>${esc(p.title||'')}</span></div></div>`).join('')}</div>`;
+ v.innerHTML=`<div class="cards">${arr.map(p=>`<div class="card partner-card" onclick='openPartnerDetail(${JSON.stringify(p.name)})' style="cursor:pointer"><div class="name">${esc(p.name)}</div><div class="tags"><span class="tag">${esc(p.type||'其他')}</span><span class="tag market">${esc(p.status||'待分類')}</span></div><div class="muted">${esc(p.note||p.source||'')}</div><div class="meta"><span>${esc(p.contact||'—')}</span><span>${esc(p.title||'')}</span></div></div>`).join('')}</div>`;
 }
-function renderEvents(){const el=document.getElementById('page-events'); const years=[...new Set(data.events.map(e=>e['活動年度']).filter(Boolean))].sort(); el.innerHTML=`<div class="page-head"><div><h1 class="page-title">活動紀錄</h1><div class="subtitle">目前顯示已建檔活動，不代表完整年度活動數</div></div></div><div class="filters"><div class="field"><label>搜尋</label><input id="q-events" placeholder="活動名稱、主辦、地點..." oninput="applyEventFilters()"></div><div class="field"><label>年度</label><select id="year-events" onchange="applyEventFilters()"><option value="">全部</option>${years.map(y=>`<option>${esc(y)}</option>`).join('')}</select></div><button class="btn" onclick="document.getElementById('q-events').value='';document.getElementById('year-events').value='';applyEventFilters()">清除篩選</button></div><div id="events-view"></div>`; applyEventFilters()}function applyEventFilters(){let arr=[...data.events]; const q=(document.getElementById('q-events')?.value||'').toLowerCase(); const y=document.getElementById('year-events')?.value||''; if(q)arr=arr.filter(ev=>[ev.name,ev.date,ev.place,ev.host,ev.result,ev.startups,ev.partners].join(' ').toLowerCase().includes(q)); if(y)arr=arr.filter(ev=>String(ev['活動年度']||'')===y); const v=document.getElementById('events-view'); v.innerHTML=arr.length?`<div class="cards">${arr.map(ev=>`<div class="card partner-card"><div class="name">${esc(ev.name)}</div><div class="tags">${ev['活動年度']?`<span class="tag level">${esc(ev['活動年度'])}</span>`:''}</div><div class="muted">${esc(ev.date)}｜${esc(ev.place)}｜${esc(ev.host)}</div><div class="desc">${esc(ev.result||'')}</div></div>`).join('')}</div>`:'<div class="card empty">活動資料尚未串接或目前沒有符合篩選的活動。</div>'}
+function parseEventDate(d){
+ const s=String(d||'').trim();
+ if(!s)return null;
+ let m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+ if(m)return new Date(+m[3],+m[1]-1,+m[2]);
+ m=s.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+ if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+ const t=new Date(s);
+ return isNaN(t)?null:t;
+}
+function renderEvents(){
+ const el=document.getElementById('page-events');
+ const years=[...new Set(data.events.map(e=>e.year).filter(Boolean))].sort((a,b)=>String(b).localeCompare(String(a)));
+ const eventNames=[...new Set(data.events.map(e=>e.name).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),'zh-Hant'));
+ el.innerHTML=`<div class="page-head"><div><h1 class="page-title">媒合活動</h1><div class="subtitle">活動紀錄與媒合成果追蹤</div></div></div>
+ <div class="filters">
+  <div class="field"><label>搜尋</label><input id="q-events" placeholder="新創、企業、摘要..." oninput="applyEventFilters()"></div>
+  <div class="field"><label>年份</label><select id="year-events" onchange="applyEventFilters()"><option value="">全部</option>${years.map(y=>`<option>${esc(y)}</option>`).join('')}</select></div>
+  <div class="field"><label>活動名稱</label><select id="name-events" onchange="applyEventFilters()"><option value="">全部活動</option>${eventNames.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')}</select></div>
+  <div class="field"><label>排序</label><select id="sort-events" onchange="applyEventFilters()"><option value="desc">日期 (新→舊)</option><option value="asc">日期 (舊→新)</option></select></div>
+  <button class="btn" onclick="document.getElementById('q-events').value='';document.getElementById('year-events').value='';document.getElementById('name-events').value='';document.getElementById('sort-events').value='desc';applyEventFilters()">清除篩選</button>
+ </div>
+ <div id="events-view"></div>`;
+ applyEventFilters();
+}
+function applyEventFilters(){
+ let arr=[...data.events];
+ const q=(document.getElementById('q-events')?.value||'').toLowerCase();
+ const y=document.getElementById('year-events')?.value||'';
+ const selectedName=document.getElementById('name-events')?.value||'';
+ const sort=document.getElementById('sort-events')?.value||'desc';
+
+ if(q)arr=arr.filter(ev=>[ev.name,ev.date,ev.place,ev.host,ev.cohost,ev.desc,ev.result,ev.successCase,...(ev.startupsList||[]),...(ev.partnersList||[]),...(ev.services||[]).flatMap(s=>[s.company,s.summary,s.serviceItem,s.impactType])].join(' ').toLowerCase().includes(q));
+ if(y)arr=arr.filter(ev=>String(ev.year||'')===y);
+ if(selectedName)arr=arr.filter(ev=>String(ev.name||'')===selectedName);
+ arr=arr.map(ev=>({ev,_d:parseEventDate(ev.date)}));
+ arr.sort((a,b)=>{
+  const ta=a._d?a._d.getTime():-Infinity, tb=b._d?b._d.getTime():-Infinity;
+  return sort==='asc'?ta-tb:tb-ta;
+ });
+ arr=arr.map(x=>x.ev);
+ currentExport={page:'events',title:'活動紀錄',rows:arr};
+ const v=document.getElementById('events-view');
+ v.innerHTML=arr.length?arr.map((ev,i)=>{
+  const id='ev-'+i;
+  const startupRows=(ev.startupsList||[]).map(n=>{
+   const matched=data.startups.find(x=>x.name===n)||data.alumni.find(x=>x.name===n);
+   return matched?`<a onclick='event.stopPropagation();openDetail(${JSON.stringify(matched.name)},${JSON.stringify(matched._type||'startups')})'>${esc(n)}</a>`:`<span>${esc(n)}</span>`;
+  }).join('');
+  const partnerRows=(ev.partnersList||[]).map(n=>`<span>${esc(n)}</span>`).join('');
+  return `<div class="event-card" id="${id}">
+   <div class="event-head" onclick="toggleEvent('${id}')">
+    <div style="flex:1">
+     <div class="event-name">${esc(ev.name)}</div>
+     <div class="event-meta">
+      <span><span class="ico">📅</span>${esc(ev.date||'—')}</span>
+      <span><span class="ico">📍</span>${esc(ev.place||'—')}</span>
+      <span><span class="ico">🏢</span>${esc(ev.host||'—')}</span>
+      ${ev.successCase?`<span class="ok">✓ 媒合成功案例</span>`:''}${ev.serviceOnly?`<span class="ok">表單服務紀錄</span>`:''}
+     </div>
+     ${String(ev.year||'')==='2026'&&ev.serviceCount?`<div class="event-service-summary"><span class="tag service">服務紀錄 ${esc(ev.serviceCount)} 筆</span><span class="tag service">參與新創 ${esc(ev.participatingStartupCount||0)} 家</span>${ev.impactCount?`<span class="tag impact">✓ 效益 ${esc(ev.impactCount)} 筆</span>`:''}</div>`:''}
+    </div>
+    ${ev.year?`<span class="event-year-tag">${esc(ev.year)}</span>`:''}
+    <span class="event-chevron">▾</span>
+   </div>
+   <div class="event-body">
+    <div class="event-cols">
+     <div><div class="event-col-title">參與新創</div><div class="event-people">${startupRows||'<span style="color:#94a3b8">尚無紀錄</span>'}</div></div>
+     <div><div class="event-col-title">參與企業</div><div class="event-people">${partnerRows||'<span style="color:#94a3b8">尚無紀錄</span>'}</div></div>
+    </div>
+    ${ev.result?`<div class="event-result"><div class="event-result-title">活動成果</div><p>${esc(ev.result)}</p></div>`:''}
+    ${ev.successCase?`<div class="event-case"><div class="event-case-title">🏆 媒合成功案例</div><p>${esc(ev.successCase)}</p></div>`:''}
+    ${eventServicesHtml(ev)}
+   </div>
+  </div>`;
+ }).join(''):'<div class="card empty">活動資料尚未串接或目前沒有符合篩選的活動。</div>';
+}
+function toggleEvent(id){document.getElementById(id)?.classList.toggle('open')}
 function renderMatch(){document.getElementById('page-match').innerHTML=`<div class="page-head"><div><h1 class="page-title">AI 媒合中心</h1><div class="subtitle">預留功能：未來可根據企業需求比對新創與合作對象</div></div></div><div class="card p16"><textarea id="matchText" style="width:100%;height:120px;border:1px solid var(--line);border-radius:12px;padding:12px" placeholder="輸入企業需求，例如：尋找 AI 碳盤查、智慧製造、醫療照護相關新創..."></textarea><br><br><button class="btn primary" onclick="simpleMatch()">初步媒合</button><div id="matchResult" class="section"></div></div>`}
 function simpleMatch(){const q=document.getElementById('matchText').value.toLowerCase(); const scored=data.startups.map(s=>{let score=0; s.industryTags.forEach(t=>{if(q.includes(t.toLowerCase()))score+=2}); if(q&&[s.name,s.desc,s['產業']].join(' ').toLowerCase().includes(q))score+=3; return {s,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,8); document.getElementById('matchResult').innerHTML=scored.length?scored.map(x=>`<div class="list-row" onclick='openDetail(${JSON.stringify(x.s.name)},"startups")'><b>${esc(x.s.name)}</b><span>Score ${x.score}</span></div>`).join(''):'<div class="empty">尚無明顯匹配，建議輸入更具體的產業或需求。</div>'}
 function openByName(name){const s=data.startups.find(x=>x.name===name)||data.alumni.find(x=>x.name===name); if(s)openDetail(name,s._type||'startups')}
-function openDetail(name,type='startups'){const item=(data[type]||[]).find(x=>x.name===name)||data.startups.find(x=>x.name===name)||data.alumni.find(x=>x.name===name); if(!item)return; document.querySelectorAll('.page').forEach(x=>x.classList.remove('active')); const d=document.getElementById('detail'); d.classList.add('active'); const basic=[['負責人',item.founder],['負責人職稱',item.title],['成立年份',item.startYear],['畢業年份',item.graduateYear&&item.graduateYear!=='—'?item.graduateYear:'']].filter(x=>x[1]); const similar=getSimilarStartups(item,5); d.innerHTML=`<button class="back" onclick="showPage('${type}')">← 返回</button><div class="card detail-hero"><div><div class="detail-title">${esc(item.name)}</div>${tagHtml(item)}</div><button class="edit" onclick="editData()">更新資料</button></div><div class="detail-grid"><div class="card p16"><h3>公司內容</h3><div class="kv"><b>公司簡介</b><div>${esc(item.desc||'暫無簡介描述。')}</div></div><div class="kv"><b>產品與服務</b><div>${esc(item.product||'尚未提供')}</div></div><div class="kv"><b>主要應用場景</b><div>${esc(item.scenario||'尚未提供')}</div></div><div class="kv"><b>目標客戶</b><div>${esc(item.target||'尚未提供')}</div></div><div class="kv"><b>資料保護</b><div>統編、電話、Email、地址等敏感欄位不在此頁顯示；如需原始聯繫資訊，請回 Google Sheet 查看。</div></div></div><div class="card p16"><h3>基本資料</h3>${basic.map(([k,v])=>`<div class="kv"><b>${esc(k)}</b><div>${esc(v)}</div></div>`).join('')||'<div class="empty">無基本資料</div>'}</div></div><div class="card p16 section"><h3>更多相似新創</h3>${similar.length?`<div class="similar-grid">${similar.map(x=>`<div class="similar-card" onclick='openDetail(${JSON.stringify(x.s.name)},${JSON.stringify(x.s._type||'startups')})'><div class="sim-name">${esc(x.s.name)}</div><div class="tags">${x.common.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="sim-score">相同標籤 ${x.common.length} 個</div></div>`).join('')}</div>`:'<div class="empty">目前沒有相似新創</div>'}</div>`}
+function openDetail(name,type='startups'){const item=(data[type]||[]).find(x=>x.name===name)||data.startups.find(x=>x.name===name)||data.alumni.find(x=>x.name===name); if(!item)return; currentExport={page:'detail',title:item.name,rows:[item]}; document.querySelectorAll('.page').forEach(x=>x.classList.remove('active')); const d=document.getElementById('detail'); d.classList.add('active'); const basic=[...(type==='alumni'?[['主責經理',item.manager||item['主責經理']||item.founder]]:[]),['負責人',item.founder],['負責人職稱',item.title],['成立年份',item.startYear],['畢業年份',item.graduateYear&&item.graduateYear!=='—'?item.graduateYear:''],['合約起日',item.contractStartText],['合約迄日',item.contractEndText],['統一編號',item['統一編號']],['公司電話',item['公司電話']],['Email',item['負責人連絡信箱']||item['電子郵件']||item['Email']],['地址',item['聯絡地址']||item['登記地址']]].filter(x=>x[1]); const similar=getSimilarStartups(item,5); d.innerHTML=`<button class="back" onclick="showPage('${type}')">← 返回</button><div class="card detail-hero"><div><div class="detail-title">${esc(item.name)}</div>${serviceBadges(item)}${tagHtml(item)}${serviceMeta(item)}</div><div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">${emailButtonHtml(item,item._type||type)}<button class="edit" onclick="editData()">更新資料</button></div></div><div class="detail-grid"><div class="card p16"><h3>公司內容</h3><div class="kv"><b>公司簡介</b><div>${esc(item.desc||'暫無簡介描述。')}</div></div><div class="kv"><b>產品與服務</b><div>${esc(item.product||'尚未提供')}</div></div><div class="kv"><b>主要應用場景</b><div>${esc(item.scenario||'尚未提供')}</div></div><div class="kv"><b>目標市場</b><div>${(item.targetTags&&item.targetTags.length)?`<div class="tags">${item.targetTags.map(t=>`<span class="tag market">${esc(t)}</span>`).join('')}</div>`:esc(item.target||'尚未提供')}</div></div></div><div class="card p16"><h3>基本資料</h3>${basic.map(([k,v])=>`<div class="kv"><b>${esc(k)}</b><div>${esc(v)}</div></div>`).join('')||'<div class="empty">無基本資料</div>'}</div></div><div class="card p16 service-section"><h3>服務紀錄（合約區間內）</h3>${serviceTimelineHtml(item.services)}</div><div class="card p16 section"><h3>更多相似新創</h3>${similar.length?`<div class="similar-grid">${similar.map(x=>`<div class="similar-card" onclick='openDetail(${JSON.stringify(x.s.name)},${JSON.stringify(x.s._type||'startups')})'><div class="sim-name">${esc(x.s.name)}</div><div class="tags">${x.common.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="sim-score">相同標籤 ${x.common.length} 個</div></div>`).join('')}</div>`:'<div class="empty">目前沒有相似新創</div>'}</div>`}
 function getSimilarStartups(item,limit=5){const pool=[...data.startups,...data.alumni].filter(s=>s.name!==item.name); const base=new Set(item.industryTags||[]); return pool.map(s=>{const common=(s.industryTags||[]).filter(t=>base.has(t)); return {s,common,score:common.length}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||String(a.s.name).localeCompare(b.s.name,'zh-Hant')).slice(0,limit)}
+function getPartnerMatches(p,limit=5){
+ const text=[p.name,p.note,p.source,p.reason,p['產業領域'],p['需求描述'],p['希望合作主題']].filter(Boolean).join(' ').toLowerCase();
+ return data.startups.map(s=>{
+  let score=0; const reasons=[];
+  const tagHits=(s.industryTags||[]).filter(t=>text.includes(t.toLowerCase()));
+  if(tagHits.length){score+=tagHits.length*20; reasons.push(tagHits.join('、'))}
+  const blob=[s.desc,s.product,s.scenario].filter(Boolean).join(' ');
+  reasons.push(blob.slice(0,40)+(blob.length>40?'…':''));
+  if(score===0 && (s.industryTags||[]).length) score=10;
+  return {s,score:Math.min(95,score),reason:reasons.filter(Boolean).join(' — ')};
+ }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,limit);
+}
+function openPartnerDetail(name){
+ const p=data.partners.find(x=>x.name===name);
+ if(!p)return;
+ document.querySelectorAll('.page,.detail').forEach(x=>x.classList.remove('active'));
+ const d=document.getElementById('detail'); d.classList.add('active');
+ const matches=getPartnerMatches(p);
+ d.innerHTML=`<button class="back" onclick="showPage('partners')">← 返回列表</button>
+ <div class="card detail-hero">
+  <div class="partner-hero"><div class="partner-avatar">P</div><div><div class="detail-title">${esc(p.name)}</div><div class="tags"><span class="tag">${esc(p.type||'其他')}</span><span class="tag market">${esc(p.status||'待分類')}</span></div></div></div>
+ </div>
+ <div class="detail-grid">
+  <div class="card p16">
+   <h3>合作資訊</h3>
+   <div class="kv"><b>需求描述</b><div>${esc(p['需求描述']||p.note||'尚未提供')}</div></div>
+   <div class="kv"><b>希望合作主題</b><div>${esc(p['希望合作主題']||p.reason||'尚未提供')}</div></div>
+   <div class="kv"><b>產業領域</b><div>${esc(p['產業領域']||p.source||'尚未提供')}</div></div>
+   <div class="kv"><b>備註</b><div>${esc(p.note||'尚未提供')}</div></div>
+  </div>
+  <div class="card p16 detail-side">
+   <h3>聯絡資訊</h3>
+   <div class="kv"><b>聯絡窗口</b><div>${esc(p.contact||'—')}</div></div>
+   <div class="kv"><b>聯絡方式</b><div>${esc(p.email||p.phone||'—')}</div></div>
+   <div class="kv"><b>合作狀態</b><div>${esc(p.status||'待分類')}</div></div>
+  </div>
+ </div>
+ <div class="card p16 section">
+  <h3>適配度分析 — 推薦新創</h3>
+  ${matches.length?`<table class="adapt-table"><thead><tr><th>推薦新創</th><th>技術能力 / 匹配原因</th><th style="text-align:right">適配度</th></tr></thead><tbody>${matches.map(m=>`<tr><td><span class="adapt-name" onclick='openDetail(${JSON.stringify(m.s.name)},${JSON.stringify(m.s._type||'startups')})'>${esc(m.s.name)}</span></td><td>${esc(m.reason)}</td><td class="adapt-score">${m.score}%</td></tr>`).join('')}</tbody></table>`:'<div class="empty">目前沒有明顯匹配的新創，建議補充需求描述或合作主題。</div>'}
+ </div>`;
+}
+function showServiceStartups(){showPage('startups'); setTimeout(()=>{document.getElementById('q-startups').value=''; renderStartupView('startups',data.startups.filter(s=>Number(s.serviceCount)>0));},0)}
+function showImpactStartups(){showPage('startups'); setTimeout(()=>{document.getElementById('q-startups').value=''; renderStartupView('startups',data.startups.filter(s=>s.hasImpact));},0)}
 function filterByTag(tag){showPage('startups'); setTimeout(()=>{document.querySelectorAll('#multi-ind-startups input').forEach(x=>x.checked=x.value===tag); applyFilters('startups')},0)}
 function toggleMulti(id){document.querySelectorAll('.multi').forEach(m=>{if(m.id!==id)m.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
 document.addEventListener('click',e=>{if(!e.target.closest('.multi'))document.querySelectorAll('.multi').forEach(m=>m.classList.remove('open'))})
@@ -206,5 +1071,11 @@ function editData(){if(confirm('資料修改請至 Google Sheet 更新，更新�
 function globalSearch(){const q=document.getElementById('globalSearch').value.toLowerCase(); if(!q)return; showPage('startups'); setTimeout(()=>{document.getElementById('q-startups').value=q; applyFilters('startups')},0)}
 loadAll();
 </script>
+
+<footer class="iaps-footer">
+  <div><strong>IAPS Accelerator OS v1.0</strong></div>
+  <div>Designed &amp; Developed by Ning Chen for NYCU IAPS</div>
+</footer>
+
 </body>
 </html>
